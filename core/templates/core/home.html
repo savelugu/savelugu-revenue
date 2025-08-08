@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<style>
+    .home-container {
+        max-width: 700px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .home-container h1 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .home-container p {
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
+    .home-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .home-links li {
+        margin: 12px 0;
+    }
+
+    .home-links a {
+        display: inline-block;
+        background: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 15px;
+        transition: background 0.3s ease;
+    }
+
+    .home-links a:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="home-container">
+    <h1>Welcome to Revenue Mobilization App</h1>
+    <p>This is your dashboard for managing businesses and payments.</p>
+
+    <ul class="home-links">
+        <li><a href="{% url 'register_business' %}">🏢 Register a Business</a></li>
+        <li><a href="{% url 'business_success' %}">✅ View Registration Success Page</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+
+

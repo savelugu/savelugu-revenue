@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Collector Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    /* Keep your existing styles */
+    .dashboard-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+    .dashboard-title {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 24px;
+        color: #333;
+    }
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+        align-items: flex-end;
+    }
+    .filter-form .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+    .filter-form label {
+        font-weight: bold;
+        font-size: 14px;
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    .filter-form input,
+    .filter-form select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border 0.3s ease;
+    }
+    .filter-form input:focus,
+    .filter-form select:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+    .filter-form .btn {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    .filter-form .btn:hover {
+        background: #0056b3;
+    }
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+    .styled-table thead tr {
+        background-color: #007bff;
+        color: white;
+        text-align: left;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+    }
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .styled-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+    }
+    .charts-container {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+    }
+    canvas {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        max-width: 600px;
+        width: 100%;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2 class="dashboard-title">📊 Collector Dashboard</h2>
+
+    <form method="get" class="filter-form">
+        <div class="form-group">
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" value="{{ start_date }}">
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" value="{{ end_date }}">
+        </div>
+
+        <div class="form-group">
+            <label for="method">Payment Method:</label>
+            <select name="method">
+                <option value="">All</option>
+                <option value="mobile_money" {% if method == 'mobile_money' %}selected{% endif %}>Mobile Money</option>
+                <option value="cash" {% if method == 'cash' %}selected{% endif %}>Cash</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Filter</button>
+    </form>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Business</th>
+                <th>Amount (GHS)</th>
+                <th>Method</th>
+                <th>Receipt ID</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.business.name }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.get_method_display }}</td>
+                <td>{{ payment.receipt_id }}</td>
+                <td>{{ payment.date|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">No payments found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="charts-container">
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const revenueLabels = {{ revenue_labels|safe }};
+    const revenueData = {{ revenue_data|safe }};
+
+    // Monthly Revenue Chart
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: revenueLabels,
+            datasets: [{
+                label: 'Monthly Revenue (GHS)',
+                data: revenueData,
+                backgroundColor: '#007bff33',
+                borderColor: '#007bff',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+</script>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .success-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 30px 25px;
+    background: #f0f9ff;
+    border: 2px solid #4CAF50;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+
+  .success-container h2 {
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+  }
+
+  .success-details p {
+    font-size: 18px;
+    margin: 12px 0;
+  }
+
+  .success-details strong {
+    color: #2e7d32;
+  }
+
+  .btn-submit-again {
+    display: block;
+    margin: 30px auto 0 auto;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    width: fit-content;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-submit-again:hover {
+    background-color: #388e3c;
+  }
+</style>
+
+<div class="success-container">
+  <h2>✅ Payment Submitted Successfully</h2>
+
+  <div class="success-details">
+    <p><strong>Business:</strong> {{ payment.business.name }}</p>
+    <p><strong>Amount:</strong> GHS {{ payment.amount }}</p>
+    <p><strong>Method:</strong> {{ payment.get_method_display }}</p>
+    <p><strong>Receipt ID:</strong> {{ payment.receipt_id }}</p>
+    <p><strong>Date:</strong> {{ payment.date|date:"F j, Y, g:i a" }}</p>
+  </div>
+
+  <a href="{% url 'submit_payment' %}" class="btn-submit-again">Submit Another Payment</a>
+</div>
+{% endblock %}
+
