@@ -4,40 +4,56 @@
     <title>Revenue App</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f7f7f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
         }
+
         nav {
-            background: #eee;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            background: linear-gradient(to right, #0d6efd, #0b5ed7);
+            padding: 12px 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
+
         nav a {
-            margin-right: 15px;
+            margin-right: 20px;
             text-decoration: none;
-            color: #333;
-            font-weight: bold;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
         }
+
         nav a:hover {
-            text-decoration: underline;
+            color: #ffe082;
         }
+
         .container {
+            max-width: 1000px;
+            margin: 30px auto;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'dashboard' %}">Dashboard</a>
-        <a href="{% url 'register_business' %}">Register Business</a>
-        <a href="{% url 'submit_payment' %}">Submit Payment</a>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+        <a href="{% url 'register_business' %}">📝 Register Business</a>
+        <a href="{% url 'submit_payment' %}">💰 Submit Payment</a>
+        <a href="{% url 'revenue_reports' %}">🏦 Revenue Report</a>
+        <a href="{% url 'forecasting' %}">📈 Revenue Forecast</a>
+        <a href="{% url 'logout' %}">🚪 Logout</a>
     </nav>
     
     <div class="container">

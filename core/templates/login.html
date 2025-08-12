@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% load static %}
+
 <style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
     .form-container {
         max-width: 400px;
         margin: 60px auto;
@@ -64,7 +74,11 @@
 </style>
 
 <div class="form-container">
-    <h2>🔐 Login</h2>
+    <h2>
+        <img src="{% static 'core/images/coat.png' %}" alt="Business Logo" style="height: 70px; vertical-align: middle; margin-right: 8px;">
+        Login
+    </h2>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

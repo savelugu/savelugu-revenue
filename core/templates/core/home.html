@@ -3,7 +3,16 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
+{% load static %}
 <style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
     .home-container {
         max-width: 700px;
         margin: 50px auto;
@@ -56,8 +65,19 @@
     <p>This is your dashboard for managing businesses and payments.</p>
 
     <ul class="home-links">
-        <li><a href="{% url 'register_business' %}">🏢 Register a Business</a></li>
-        <li><a href="{% url 'business_success' %}">✅ View Registration Success Page</a></li>
+        <li>
+    <a href="{% url 'register_business' %}">
+        <img src="{% static 'core/images/cropped.png' %}" alt="Register Business" style="width:20px; height:20px; vertical-align:middle;">
+        Register a Business
+    </a>
+        </li>
+
+    <li>
+    <a href="{% url 'business_success' %}">
+        <img src="{% static 'core/images/coat.png' %}" alt="Register Business" style="width:20px; height:20px; vertical-align:middle;">
+        View Registration Success Page
+    </a>
+        </li>
     </ul>
 </div>
 {% endblock %}

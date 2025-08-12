@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
-    list_display = ['name', 'phone_number', 'location']
+    list_display = ['name', 'phone_number', 'location', 'latitude', 'longitude']
     search_fields = ['name', 'phone_number']
     list_filter = ['location']
 

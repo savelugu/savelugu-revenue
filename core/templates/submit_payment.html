@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% load static %}
+
 <style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
     .form-container {
         max-width: 500px;
         margin: 50px auto;
@@ -72,7 +82,10 @@
 </style>
 
 <div class="form-container">
-    <h2>💳 Submit Payment</h2>
+    <h2>
+        <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo" style="height: 50px; vertical-align: middle; margin-right: 8px;">
+        Submit Payment
+    </h2>
 
     <form method="post">
         {% csrf_token %}

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: revenue-mobilization
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn core.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: core.settings
+      - key: SECRET_KEY
+        value: tv3yd@xa#uph)ptb07c2b4)(c)lclb8w^_922mo*kj1b(@x16v
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: your-app-name.onrender.com
+      - key: DATABASE_URL
+        value: your-postgres-url-here

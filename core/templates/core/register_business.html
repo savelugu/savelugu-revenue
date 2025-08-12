@@ -3,27 +3,27 @@
 {% block title %}Register Business{% endblock %}
 
 {% block content %}
+{% load static %}
+
 <style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
     .form-container {
         max-width: 500px;
         margin: 50px auto;
         padding: 25px;
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.9); /* Slight transparency */
         border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif;
     }
-
-    .form-container h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
-
-    .form-container p {
-        margin-bottom: 15px;
-    }
-
+    .form-container h2 { text-align: center; margin-bottom: 20px; color: #333; }
+    .form-container p { margin-bottom: 15px; }
     .form-container input,
     .form-container select,
     .form-container textarea {
@@ -36,14 +36,12 @@
         font-size: 14px;
         transition: border 0.3s ease;
     }
-
     .form-container input:focus,
     .form-container select:focus,
     .form-container textarea:focus {
         border-color: #007bff;
         outline: none;
     }
-
     .btn-submit {
         width: 100%;
         padding: 12px;
@@ -55,11 +53,19 @@
         cursor: pointer;
         transition: background 0.3s ease;
     }
-
-    .btn-submit:hover {
-        background: #0056b3;
+    .btn-submit:hover { background: #0056b3; }
+    .btn-gps {
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        font-size: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 10px;
     }
-
+    .btn-gps:hover { background: #218838; }
     .success-message {
         background: #d4edda;
         color: #155724;
@@ -69,7 +75,6 @@
         font-size: 14px;
         border: 1px solid #c3e6cb;
     }
-
     .back-link {
         display: block;
         text-align: center;
@@ -77,14 +82,20 @@
         text-decoration: none;
         color: #007bff;
     }
-
-    .back-link:hover {
-        text-decoration: underline;
+    .back-link:hover { text-decoration: underline; }
+    #coords-display {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #155724;
+        font-weight: bold;
     }
 </style>
 
 <div class="form-container">
-    <h2>🏢 Register a New Business</h2>
+    <h2>
+        <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo" style="height: 50px; vertical-align: middle; margin-right: 8px;">
+        Register a New Business
+    </h2>
 
     {% if messages %}
         {% for message in messages %}
@@ -92,16 +103,69 @@
         {% endfor %}
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" id="businessForm">
         {% csrf_token %}
         {{ form.as_p }}
+
+        <!-- Hidden fields for GPS -->
+        <input type="hidden" id="id_latitude" name="latitude">
+        <input type="hidden" id="id_longitude" name="longitude">
+
+        <!-- Button to capture GPS -->
+        <button type="button" class="btn-gps" onclick="captureGPS()">📍 Capture GPS Coordinates</button>
+        
+        <!-- Display coordinates live -->
+        <div id="coords-display"></div>
+
         <button type="submit" class="btn-submit">Register</button>
     </form>
 
     <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
 </div>
-{% endblock %}
 
+<script>
+function captureGPS() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+
+                // Fill hidden fields
+                document.getElementById("id_latitude").value = lat;
+                document.getElementById("id_longitude").value = lng;
+
+                // Show them on the page
+                document.getElementById("coords-display").innerHTML =
+                    `📍 Coordinates captured: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            },
+            function(error) {
+                alert("Unable to retrieve GPS location. Please allow location access.");
+                console.warn("GPS error:", error);
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// Automatically capture GPS when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    captureGPS();
+});
+
+// Ensure GPS is set before submitting
+document.getElementById("businessForm").addEventListener("submit", function(e) {
+    let lat = document.getElementById("id_latitude").value;
+    let lng = document.getElementById("id_longitude").value;
+
+    if (!lat || !lng) {
+        e.preventDefault();
+        alert("Please capture your GPS location before submitting.");
+    }
+});
+</script>
+{% endblock %}
 
 
 

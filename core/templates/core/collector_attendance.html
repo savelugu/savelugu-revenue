@@ -1,0 +1,25 @@
+<button id="startBtn">Start Shift</button>
+<button id="stopBtn" disabled>Stop Shift</button>
+<script>
+let attendanceId = null;
+document.getElementById('startBtn').onclick = async () => {
+  if (!navigator.geolocation) return alert('No geolocation');
+  navigator.geolocation.getCurrentPosition(async (pos)=> {
+    const res = await fetch("{% url 'attendance_start' %}", {
+      method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}, body: new URLSearchParams({
+        lat: pos.coords.latitude, lng: pos.coords.longitude
+      })
+    });
+    const data = await res.json(); attendanceId = data.attendance_id;
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('stopBtn').disabled = false;
+    // optionally start interval to log route points
+  });
+};
+document.getElementById('stopBtn').onclick = async () => {
+  navigator.geolocation.getCurrentPosition(async (pos)=> {
+    await fetch(`/attendance/stop/${attendanceId}/`, {method:'POST', headers:{'X-CSRFToken': '{{ csrf_token }}'}, body: new URLSearchParams({lat:pos.coords.latitude, lng:pos.coords.longitude})});
+    document.getElementById('stopBtn').disabled=true;
+  });
+};
+</script>

@@ -19,7 +19,9 @@ class User(AbstractUser):
 class Business(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15, unique=True)
-    location = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)  # still keep a text address if you want
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)  # e.g. 9.0580
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True) # e.g. -0.8595
     registered_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -60,3 +62,71 @@ class Payment(models.Model):
         verbose_name = "Payment"
         verbose_name_plural = "Payments"
 
+class Attendance(models.Model):
+    collector = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    start_lat = models.FloatField(null=True, blank=True)
+    start_lng = models.FloatField(null=True, blank=True)
+    end_lat = models.FloatField(null=True, blank=True)
+    end_lng = models.FloatField(null=True, blank=True)
+
+    def close(self, end_lat=None, end_lng=None):
+        import django.utils.timezone as tz
+        self.end_time = tz.now()
+        if end_lat: self.end_lat = end_lat
+        if end_lng: self.end_lng = end_lng
+        self.save()
+
+class RoutePoint(models.Model):
+    collector = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    lat = models.FloatField()
+    lng = models.FloatField()
+    attendance = models.ForeignKey(Attendance, on_delete=models.SET_NULL, null=True, blank=True)
+
+class CollectorMetricsCache(models.Model):
+    collector = models.OneToOneField(User, on_delete=models.CASCADE)
+    total_collected = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    number_of_collections = models.IntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True)
+
+class FraudAlert(models.Model):
+    transaction_id = models.CharField(max_length=50)
+    reason = models.TextField()
+    detected_on = models.DateTimeField(auto_now_add=True)
+    severity = models.CharField(max_length=20, choices=[
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High')
+    ])
+
+    def __str__(self):
+        return f"Alert: {self.transaction_id} ({self.severity})"
+
+class ForecastRecord(models.Model):
+    forecast_date = models.DateField()
+    predicted_revenue = models.DecimalField(max_digits=12, decimal_places=2)
+    confidence_interval = models.CharField(max_length=50)  # e.g., "±5%"
+
+    def __str__(self):
+        return f"Forecast {self.forecast_date} - {self.predicted_revenue}"    
+    
+class AnalyticsSummary(models.Model):
+    generated_on = models.DateTimeField(auto_now_add=True)
+    total_revenue = models.DecimalField(max_digits=12, decimal_places=2)
+    avg_daily_revenue = models.DecimalField(max_digits=12, decimal_places=2)
+    top_collector = models.CharField(max_length=100)
+    highest_area = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Analytics {self.generated_on}"  
+
+class RevenueRecord(models.Model):
+    date = models.DateField()
+    collector = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.date} - {self.collector} - {self.amount}"      

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .metrics-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .metric-card {
+        flex: 1 1 250px;
+        background-color: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .metric-title {
+        font-size: 16px;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+    }
+
+    .metric-value {
+        font-size: 24px;
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    #analyticsChart {
+        margin-top: 40px;
+        height: 400px;
+        background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2>📊 Analytics Dashboard</h2>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-title">Total Revenue Collected</div>
+            <div class="metric-value">{{ total_revenue }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Average Revenue Collected</div>
+            <div class="metric-value">{{ avg_daily }}</div>
+        </div>
+        <div class="metric-card">
+    <div class="metric-title">Top Revenue Collector</div>
+    <div class="metric-value">
+        ID: {{ top_collector.collector }}<br>
+        Total: GH₵{{ top_collector.total }}
+    </div>
+</div>
+
+    </div>
+
+    <div id="analyticsChart"></div>
+</div>
+
+<script>
+    // Placeholder for chart integration
+    console.log("Analytics chart will load here.");
+</script>
+{% endblock %}
+

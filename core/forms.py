@@ -23,9 +23,11 @@ class CustomLoginForm(AuthenticationForm):
 class BusinessForm(forms.ModelForm):
     class Meta:
         model = Business
-        fields = ['name', 'phone_number', 'location']
+        fields = ['name', 'phone_number', 'location', 'latitude', 'longitude']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Location'}),
+            'latitude': forms.HiddenInput(attrs={'id': 'latitude'}),
+            'longitude': forms.HiddenInput(attrs={'id': 'longitude'}),
         }
