@@ -6,6 +6,13 @@
 {% load static %}
     <title>Forecast Dashboard</title>
     <style>
+        body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
         /* Container Styling */
         .forecast-section {
             max-width: 1000px;
@@ -87,17 +94,46 @@
                 font-size: 20px;
             }
         }
+
+            .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .dashboard-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+    h2 img {
+        height: 70px;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
     </style>
 </head>
 <body>
     <div class="forecast-section">
         {% if forecast_table %}
-        
-    <div class="dashboard-container">
-            <h2>
             
-            Forecast Summary (Next 7 Days)
-        </h2>
+        <div class="dashboard-container">
+    <h2>
+        <img src="{% static 'core/images/crop2.png' %}" alt="Business Logo">
+        Forecast Summary (Next 7 Days)
+    </h2>
+
             <table class="styled-table">
                 <thead>
                     <tr>

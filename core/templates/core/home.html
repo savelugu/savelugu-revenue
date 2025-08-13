@@ -1,43 +1,66 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
-{% load static %}
 <style>
     body {
         background-image: url("{% static 'core/images/theme.png' %}");
-        background-size: cover; /* Makes image fill the page */
+        background-size: cover;
         background-repeat: no-repeat;
-        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-attachment: fixed;
         background-position: center;
     }
-    .home-container {
-        max-width: 700px;
-        margin: 50px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .home-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: 1000px;
+        margin: 60px auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .home-image {
+        flex: 1 1 300px;
+        padding: 20px;
         text-align: center;
-        font-family: Arial, sans-serif;
     }
 
-    .home-container h1 {
+    .home-image img {
+        max-width: 100%;
+        height: 300;
+        border-radius: 8px;
+    }
+
+    .home-content {
+        flex: 1 1 400px;
+        padding: 40px 30px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+    }
+
+    .home-content h1 {
         color: #333;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        font-size: 28px;
     }
 
-    .home-container p {
+    .home-content p {
         color: #555;
         font-size: 16px;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
     }
 
     .home-links {
         list-style: none;
         padding: 0;
+        margin: 0;
     }
 
     .home-links li {
@@ -58,27 +81,208 @@
     .home-links a:hover {
         background: #0056b3;
     }
+
+    .home-links img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+
+    @keyframes scaleIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+        100% { transform: scale(1); }
+    }
+
+    .home-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        animation: scaleIn 0.8s ease-out;
+        transition: transform 0.3s ease;
+    }
+
+    .home-image img:hover {
+        animation: pulse 0.6s ease-in-out;
+    }
+
+        /* TEXT ANIMATION */
+    @keyframes fadeUp {
+        0% {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .home-text {
+        animation: fadeUp 0.8s ease-out;
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+    }
+
+    /* BUTTON ENTRANCE */
+    @keyframes slideBounce {
+        0% {
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(10px);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    .home-buttons button {
+        animation: slideBounce 0.9s ease-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: both;
+        margin: 0.5em;
+        padding: 0.6em 1.2em;
+        border: none;
+        border-radius: 6px;
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    /* BUTTON HOVER EFFECT */
+    .home-buttons button:hover {
+        box-shadow: 0 0 12px rgba(0, 123, 255, 0.6);
+        transform: scale(1.05);
+    }
+
+    /* TEXT ANIMATION */
+@keyframes fadeUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+        }
+    }
+
+    .home-content h1,
+    .home-content p {
+        animation: fadeUp 0.8s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .home-content h1 {
+        animation-delay: 0.2s;
+    }
+
+    .home-content p {
+        animation-delay: 0.4s;
+    }
+
+    /* BUTTON ANIMATION */
+    @keyframes slideBounce {
+        0% {
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(10px);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    .home-links li {
+        animation: slideBounce 0.9s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .home-links li:nth-child(1) {
+        animation-delay: 0.6s;
+    }
+
+    .home-links li:nth-child(2) {
+        animation-delay: 0.8s;
+    }
+
+    /* BUTTON STYLE ENHANCEMENT */
+    .home-links a {
+        display: inline-block;
+        background: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 15px;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .home-links a:hover {
+        background: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .home-links img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+
+
+
 </style>
 
-<div class="home-container">
-    <h1>Welcome to Revenue Mobilization App</h1>
-    <p>This is your dashboard for managing businesses and payments.</p>
+<div class="home-wrapper">
+    <div class="home-image">
+        <img src="{% static 'core/images/rev.png' %}" alt="Dashboard Illustration">
+    </div>
 
-    <ul class="home-links">
-        <li>
-    <a href="{% url 'register_business' %}">
-        <img src="{% static 'core/images/cropped.png' %}" alt="Register Business" style="width:20px; height:20px; vertical-align:middle;">
-        Register a Business
-    </a>
-        </li>
+    <div class="home-content">
+        <div class="welcome-section">
+        <h1 class="welcome-title">🚀 Welcome to <span>Revenue Mobilization App</span></h1>
+        <p class="welcome-subtitle">
+            Your centralized dashboard for <strong>business registration</strong>, <strong>payment tracking</strong>, and <strong>revenue insights</strong>.
+        </p>
+    </div>
 
-    <li>
-    <a href="{% url 'business_success' %}">
-        <img src="{% static 'core/images/coat.png' %}" alt="Register Business" style="width:20px; height:20px; vertical-align:middle;">
-        View Registration Success Page
-    </a>
-        </li>
-    </ul>
+
+        <ul class="home-links">
+            <li>
+                <a href="{% url 'register_business' %}">
+                    <img src="{% static 'core/images/rev.png' %}" alt="Register Icon">
+                    Register a Business
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'business_success' %}">
+                    <img src="{% static 'core/images/coat.png' %}" alt="Success Icon">
+                    View Registration Success Page
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
 

@@ -3,8 +3,20 @@
 {% block title %}Business Registered{% endblock %}
 
 {% block content %}
+{% load static %}
+
+<style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover; /* Makes image fill the page */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-position: center;
+    }
+</style>    
 <h1>🎉 Business Registered Successfully!</h1>
 <p>Your business details have been saved.</p>
+
 
 <p><a href="{% url 'home' %}">Back to Home</a></p>
 {% endblock %}

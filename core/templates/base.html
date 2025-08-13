@@ -43,18 +43,56 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+            .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 30px;
+        margin: 0 auto;
+        max-width: 1000px;
+    }
+
+    .card-button {
+        display: block;
+        background: linear-gradient(to right, #0d6efd, #0b5ed7);
+        color: white;
+        text-align: center;
+        padding: 16px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .card-button:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(to right, #0b5ed7, #0a58ca);
+    }
+
+    .card-button.logout {
+        background: linear-gradient(to right, #dc3545, #c82333);
+    }
+
+    .card-button.logout:hover {
+        background: linear-gradient(to right, #c82333, #bd2130);
+    }
+
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'home' %}">🏠 Home</a>
-        <a href="{% url 'dashboard' %}">📊 Dashboard</a>
-        <a href="{% url 'register_business' %}">📝 Register Business</a>
-        <a href="{% url 'submit_payment' %}">💰 Submit Payment</a>
-        <a href="{% url 'revenue_reports' %}">🏦 Revenue Report</a>
-        <a href="{% url 'forecasting' %}">📈 Revenue Forecast</a>
-        <a href="{% url 'logout' %}">🚪 Logout</a>
-    </nav>
+    <div class="card-grid">
+    <a href="{% url 'home' %}" class="card-button">🏠 Home</a>
+    <a href="{% url 'dashboard' %}" class="card-button">📊 Dashboard</a>
+    <a href="{% url 'register_business' %}" class="card-button">📝 Register Business</a>
+    <a href="{% url 'submit_payment' %}" class="card-button">💰 Submit Payment</a>
+    <a href="{% url 'revenue_reports' %}" class="card-button">🏦 Revenue Report</a>
+    <a href="{% url 'forecasting' %}" class="card-button">📈 Revenue Forecast</a>
+    <a href="{% url 'logout' %}" class="card-button logout">🚪 Logout</a>
+</div>
+
     
     <div class="container">
         {% block content %}
