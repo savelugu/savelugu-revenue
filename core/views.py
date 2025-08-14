@@ -457,4 +457,12 @@ def analytics_dashboard(request):
     return render(request, 'analytics.html', {'total_revenue': total_revenue,'avg_daily': avg_daily,'top_collector': top_collector})
 
 
+from django.http import HttpResponse
+from django.core.management import call_command
+
+def run_migrations(request):
+    call_command('migrate')
+    return HttpResponse("Migrations applied.")
+
+
 

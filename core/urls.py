@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import run_migrations
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -29,6 +30,8 @@ urlpatterns = [
     path('fraud-detection/', views.fraud_detection_view, name='fraud_detection'),
     path('forecasting/', views.forecasting_view, name='forecasting'),
     path('analytics/', views.analytics_dashboard, name='analytics_dashboard'),
+    
+    path('run-migrations/', run_migrations),
 ]
 
 
