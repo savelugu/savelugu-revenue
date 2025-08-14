@@ -22,6 +22,8 @@ import os
 
 # Keep this for development (tells Django where to find app static folders)
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core', 'static'),
 ]
@@ -38,13 +40,13 @@ SECRET_KEY = "django-insecure-qdvc=90f%uu!5-0!)ubp$tao@**^n(fp0^jv3-2)i0=e$**ys*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 import dj_database_url
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
 }
 
 
