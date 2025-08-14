@@ -30,9 +30,9 @@ STATICFILES_DIRS = [
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+SECRET_KEY = config('SECRET_KEY', default='fallback-key')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-qdvc=90f%uu!5-0!)ubp$tao@**^n(fp0^jv3-2)i0=e$**ys*"
