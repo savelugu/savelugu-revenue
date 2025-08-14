@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-import os
+
 
 # Path where collectstatic will put all static files
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -42,7 +44,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
-from decouple import config
+
 import dj_database_url
 
 DATABASES = {
