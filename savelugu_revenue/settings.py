@@ -37,22 +37,26 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-qdvc=90f%uu!5-0!)ubp$tao@**^n(fp0^jv3-2)i0=e$**ys*"
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
-
-#import dj_database_url
-
-#DATABASES = {
-    #'default': dj_database_url.config(default=config('DATABASE_URL'))
-#}
 
 
-# Application definition
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
+
+
+
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
+}
+
+
+#Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -109,12 +113,12 @@ LOGOUT_REDIRECT_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+#DATABASES = {
+    # "default": {
+        # "ENGINE": "django.db.backends.sqlite3",
+        # "NAME": BASE_DIR / "db.sqlite3",
+    # }
+# }
 
 
 # Password validation

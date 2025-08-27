@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "revenue_mobilization.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "savelugu_revenue.settings")
 
 application = get_wsgi_application()
