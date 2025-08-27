@@ -309,50 +309,91 @@ def collector_dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
-@login_required
-def register_business(request):
-    # Allow only business users and collectors
-    if request.user.role not in ['collector', 'admin']:
-        logger.warning(f"Unauthorized access attempt by {request.user.username} ({request.user.role})")
-        return render(request, 'core/permission_denied.html')  # Or use HttpResponseForbidden
+import json
+import logging
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from .forms import BusinessForm
 
-    if request.method == 'POST':
+logger = logging.getLogger(__name__)
+
+@login_required
+@csrf_exempt   # allow fetch() JSON posts
+def register_business(request):
+    """
+    Handles both:
+    1. Normal single online registration (form POST)
+    2. Offline bulk sync via JSON (localStorage queue)
+    """
+
+    # ✅ Role check
+    if getattr(request.user, "role", None) not in ["collector", "admin"]:
+        messages.error(request, "Access denied. Only collectors and admins can register businesses.")
+        return redirect("dashboard")
+
+    # ✅ Case 1: Bulk JSON sync from localStorage
+    if request.method == "POST" and request.headers.get("Content-Type") == "application/json":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            businesses_data = data.get("businesses", [])
+            saved_ids = []
+
+            for entry in businesses_data:
+                form = BusinessForm(entry)
+                if form.is_valid():
+                    business = form.save(commit=False)
+                    business.registered_by = request.user
+                    business.latitude = entry.get("latitude")
+                    business.longitude = entry.get("longitude")
+                    business.registered_at = timezone.now()
+                    if hasattr(request.user, "assigned_zone"):
+                        business.zone = request.user.assigned_zone
+                    business.save()
+                    saved_ids.append(business.id)
+                    logger.info(f"✅ Offline synced business: {business.business_name}")
+                else:
+                    logger.warning(f"❌ Invalid business data skipped: {entry}")
+
+            return JsonResponse({"status": "success", "saved": saved_ids})
+
+        except Exception as e:
+            logger.error(f"❌ Bulk sync failed: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+    # ✅ Case 2: Normal online form submission
+    if request.method == "POST":
         form = BusinessForm(request.POST)
         if form.is_valid():
             business = form.save(commit=False)
-
-            # Role-based logic
             business.registered_by = request.user
-            if request.user.role == 'collector':
-                business.registered_via = 'field_agent'  # Optional tracking field
 
-            # GPS capture (if fields exist in model)
-            business.latitude = request.POST.get('latitude')
-            business.longitude = request.POST.get('longitude')
+            # parse lat/lng safely
+            try:
+                business.latitude = float(request.POST.get("latitude", 0))
+                business.longitude = float(request.POST.get("longitude", 0))
+            except (TypeError, ValueError):
+                business.latitude, business.longitude = None, None
 
-            # Timestamp and zone
             business.registered_at = timezone.now()
-            if hasattr(request.user, 'assigned_zone'):
+            if hasattr(request.user, "assigned_zone"):
                 business.zone = request.user.assigned_zone
-
             business.save()
 
-            logger.info(
-                f"Business registered by {request.user.username} ({request.user.role}) "
-                f"at {business.latitude}, {business.longitude}"
-            )
+            logger.info(f"✅ Business registered: {business.business_name} by {request.user.username}")
+            messages.success(request, f"Business '{business.business_name}' registered successfully!")
 
-            messages.success(request, "Business registered successfully.")
-
-            # ✅ Show success page with details
-            return render(request, 'core/business_success.html', {'business': business})
-
-        else:
-            messages.error(request, "Please correct the errors below.")
+            return render(request, "core/business_success.html", {"business": business})
     else:
         form = BusinessForm()
 
-    return render(request, 'core/register_business.html', {'form': form})
+    # ✅ Render registration page
+    return render(request, "core/register_business.html", {"form": form})
+
+
 
 def business_success(request):
     return render(request, 'core/business_success.html')

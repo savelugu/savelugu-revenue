@@ -8,16 +8,16 @@
 <style>
     body {
         background-image: url("{% static 'core/images/R.png' %}");
-        background-size: cover; /* Makes image fill the page */
+        background-size: cover;
         background-repeat: no-repeat;
-        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-attachment: fixed;
         background-position: center;
     }
     .form-container {
         max-width: 500px;
         margin: 50px auto;
         padding: 25px;
-        background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 10px;
         box-shadow: 0 4px 12px rgba(3, 136, 18, 1);
         font-family: Arial, sans-serif;
@@ -134,17 +134,16 @@ function captureGPS() {
             function(position) {
                 let lat = position.coords.latitude;
                 let lng = position.coords.longitude;
-                let accuracy = position.coords.accuracy; // meters
+                let accuracy = position.coords.accuracy;
 
                 // Fill hidden fields
                 document.getElementById("id_latitude").value = lat;
                 document.getElementById("id_longitude").value = lng;
 
-                // Show them on the page
+                // Show on page
                 document.getElementById("coords-display").innerHTML =
                     `📍 Coordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>🎯 Accuracy: ±${accuracy.toFixed(1)} m`;
 
-                // If accuracy is good enough (< 15m like Kobo/CSPro), stop tracking
                 if (accuracy <= 15 && watchId !== null) {
                     navigator.geolocation.clearWatch(watchId);
                     watchId = null;
@@ -156,9 +155,9 @@ function captureGPS() {
                 console.warn("GPS error:", error);
             },
             {
-                enableHighAccuracy: true,  // force GPS chip
-                timeout: 20000,            // wait up to 20s
-                maximumAge: 0              // don’t use cached
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 0
             }
         );
     } else {
@@ -166,20 +165,80 @@ function captureGPS() {
     }
 }
 
-// Ensure GPS is set before submitting
-document.getElementById("businessForm").addEventListener("submit", function(e) {
-    let lat = document.getElementById("id_latitude").value;
-    let lng = document.getElementById("id_longitude").value;
+// ---- Offline Queue Logic ----
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("businessForm");
+    const syncUrl = "{% url 'register_business' %}";
 
-    if (!lat || !lng) {
-        e.preventDefault();
-        alert("Please capture your GPS location before submitting.");
+    form.addEventListener("submit", function (e) {
+        if (!navigator.onLine) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const entry = {};
+            formData.forEach((value, key) => {
+                entry[key] = value;
+            });
+
+            queueOffline(entry);
+            alert("No internet. Business saved offline. It will sync when online.");
+        }
+    });
+
+    function queueOffline(entry) {
+        let queue = JSON.parse(localStorage.getItem("businessQueue")) || [];
+        queue.push(entry);
+        localStorage.setItem("businessQueue", JSON.stringify(queue));
+    }
+
+    async function syncQueued() {
+        let queue = JSON.parse(localStorage.getItem("businessQueue")) || [];
+        if (queue.length === 0) return;
+
+        for (let i = 0; i < queue.length; i++) {
+            try {
+                let response = await fetch(syncUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    body: JSON.stringify(queue[i]),
+                });
+
+                if (response.ok) {
+                    console.log("Synced:", queue[i]);
+                    queue.splice(i, 1);
+                    i--;
+                }
+            } catch (err) {
+                console.error("Sync failed, will retry:", err);
+            }
+        }
+        localStorage.setItem("businessQueue", JSON.stringify(queue));
+    }
+
+    window.addEventListener("online", syncQueued);
+    syncQueued();
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 });
 </script>
 
 {% endblock %}
-
 
 
 
