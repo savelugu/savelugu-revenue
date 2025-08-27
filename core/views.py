@@ -1159,33 +1159,62 @@ def home(request):
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.shortcuts import render
-from .models import BusinessOwner, BusinessOwnerPayment
+from django.http import HttpResponseForbidden
+from .models import BusinessOwner, BusinessOwnerPayment, User
 
 @login_required
 def business_owner_dashboard(request):
-    # Directly access the linked BusinessOwner profile
-    business_owner = request.user.business_profile
+    if request.user.role == 'business':
+        # Show the logged-in business user's profile
+        try:
+            business_owner = request.user.business_profile
+        except BusinessOwner.DoesNotExist:
+            business_owner = None
 
-    # Payments related to this business owner
-    payments = BusinessOwnerPayment.objects.filter(business=business_owner)
+        if business_owner:
+            payments = BusinessOwnerPayment.objects.filter(business=business_owner)
+            total_amount = payments.filter(status="success").aggregate(total=Sum("amount"))["total"] or 0
+            total_payments = payments.count()
+            pending_count = payments.filter(status="pending").count()
+            success_count = payments.filter(status="success").count()
+            failed_count = payments.filter(status="failed").count()
+        else:
+            payments = []
+            total_amount = total_payments = pending_count = success_count = failed_count = 0
 
-    # Stats
-    total_amount = payments.filter(status="success").aggregate(total=Sum("amount"))["total"] or 0
-    total_payments = payments.count()
-    pending_count = payments.filter(status="pending").count()
-    success_count = payments.filter(status="success").count()
-    failed_count = payments.filter(status="failed").count()
+        context = {
+            "business_owner": business_owner,
+            "payments": payments[:5],  # latest 5 payments
+            "total_amount": total_amount,
+            "total_payments": total_payments,
+            "pending_count": pending_count,
+            "success_count": success_count,
+            "failed_count": failed_count,
+        }
+        return render(request, "business_owner_dashboard.html", context)
 
-    context = {
-        "business_owner": business_owner,
-        "payments": payments[:5],  # latest 5 payments
-        "total_amount": total_amount,
-        "total_payments": total_payments,
-        "pending_count": pending_count,
-        "success_count": success_count,
-        "failed_count": failed_count,
-    }
-    return render(request, "business_owner_dashboard.html", context)
+    elif request.user.role == 'admin':
+        # Admin sees all business owners and their payments
+        all_businesses = BusinessOwner.objects.all()
+        businesses_data = []
+        for bo in all_businesses:
+            payments = BusinessOwnerPayment.objects.filter(business=bo)
+            businesses_data.append({
+                "business_owner": bo,
+                "payments": payments[:5],
+                "total_amount": payments.filter(status="success").aggregate(total=Sum("amount"))["total"] or 0,
+                "total_payments": payments.count(),
+                "pending_count": payments.filter(status="pending").count(),
+                "success_count": payments.filter(status="success").count(),
+                "failed_count": payments.filter(status="failed").count(),
+            })
+        context = {"businesses_data": businesses_data}
+        return render(request, "admin_business_dashboard.html", context)
+
+    else:
+        # Collectors or other roles cannot access
+        return HttpResponseForbidden("You are not allowed to view this page.")
+
 
 
 from django.shortcuts import render
