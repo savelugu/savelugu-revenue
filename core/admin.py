@@ -23,6 +23,11 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = User
     list_display = ['username', 'email', 'role', 'is_staff']
+    list_filter = ('role', 'is_staff', 'is_superuser')
+    search_fields = ('username', 'email')
+    ordering = ('username',)
+    readonly_fields = ('last_login', 'date_joined')
+
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'role', 'phone_number')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'groups', 'user_permissions')}),
@@ -34,6 +39,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2', 'role', 'phone_number', 'is_staff', 'is_superuser'),
         }),
     )
+
 
 
 @admin.register(Business)
