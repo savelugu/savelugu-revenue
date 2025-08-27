@@ -1209,7 +1209,7 @@ def business_owner_dashboard(request):
                 "failed_count": payments.filter(status="failed").count(),
             })
         context = {"businesses_data": businesses_data}
-        return render(request, "admin_business_dashboard.html", context)
+        return render(request, "business_owner_dashboard.html", context)
 
     else:
         # Collectors or other roles cannot access
