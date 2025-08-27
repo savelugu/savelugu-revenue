@@ -45,7 +45,10 @@ DEBUG = True
 
 
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
+ALLOWED_HOSTS = [
+    "savelugu-revenue.onrender.com",  # Add your Render app domain here
+]
 
 # CSRF trusted origins (for HTTPS requests)
 CSRF_TRUSTED_ORIGINS = [
