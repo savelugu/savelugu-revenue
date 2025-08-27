@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+        body {
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
+
+    .form-container {
+        max-width: 480px;
+        margin: 70px auto;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 115, 6, 0.4);
+        animation: fadeIn 0.7s ease-in-out;
+    }
+
+    .form-container h2 {
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        color: #075E0C;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .form-container img {
+        height: 45px;
+        margin-right: 10px;
+    }
+
+    form p {
+        margin-bottom: 15px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: border 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        border-color: #169805;
+        outline: none;
+        box-shadow: 0 0 5px rgba(22, 152, 5, 0.3);
+    }
+
+    .btn-paystack {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #169805, #0a5c02);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-paystack:hover {
+        background: linear-gradient(135deg, #0a5c02, #169805);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(22, 152, 5, 0.3);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 15px;
+        text-decoration: none;
+        font-size: 14px;
+        color: #075E0C;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #0c7d12;
+        text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .success-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 30px;
+        background: #ffffff;
+        border: 2px solid #169805ff;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(22, 152, 5, 0.2);
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .success-container h2 {
+        color: #169805ff;
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 26px;
+    }
+
+    .success-details p {
+        font-size: 18px;
+        margin: 12px 0;
+    }
+
+    .success-details strong {
+        color: #117a04;
+    }
+
+    .btn-submit-again {
+        display: block;
+        margin: 30px auto 0;
+        background-color: #169805ff;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(22, 152, 5, 0.3);
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-submit-again:hover {
+        background-color: #117a04;
+    }
+</style>
+
+{% if payment_success %}
+    <div class="success-container">
+        <h2>✅ Payment Submitted Successfully</h2>
+        <div class="success-details">
+            <p><strong>Business:</strong> {{ payment.business.business_name|default:"N/A" }}</p>
+            <p><strong>Amount:</strong> GHS {{ payment.amount|floatformat:2 }}</p>
+            <p><strong>IGF Type:</strong> {{ payment.igf_type|default:"N/A" }}</p>
+            <p><strong>Method:</strong> Mobile Money</p>
+            <p><strong>Receipt ID:</strong> {{ payment.receipt_id|default:"N/A" }}</p>
+            <p><strong>Date:</strong> {{ payment.timestamp|date:"F j, Y, g:i a" }}</p>
+        </div>
+        <a href="{% url 'submit_business_owner_payment' %}" class="btn-submit-again">Submit Another Payment</a>
+    </div>
+{% else %}
+    <!-- Original form block -->
+    <div class="form-container">
+        <h2>
+            <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo">
+            Business Owner Payment
+        </h2>
+
+        <form id="payment-form" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="paystack_reference" id="paystack-reference">
+            <button type="button" id="paystack-btn" class="btn-paystack">💳 Pay with Paystack</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script>
+        document.getElementById('paystack-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const email = document.querySelector('#id_email')?.value || "{{ request.user.email }}";
+            const amount = parseFloat(document.querySelector('#id_amount')?.value || 0) * 100;
+
+            if (!email || !amount) {
+                alert("Please enter a valid email and amount.");
+                return;
+            }
+
+            const handler = PaystackPop.setup({
+                key: "{{ PAYSTACK_PUBLIC_KEY }}",
+                email: email,
+                amount: amount,
+                currency: "GHS",
+                ref: 'BO-' + Math.floor((Math.random() * 1000000000) + 1),
+                callback: function(response) {
+                    document.getElementById('paystack-reference').value = response.reference;
+                    document.getElementById('payment-form').submit();
+                },
+                onClose: function() {
+                    alert("Payment popup closed.");
+                }
+            });
+
+            handler.openIframe();
+        });
+    </script>
+{% endif %}
+{% endblock %}

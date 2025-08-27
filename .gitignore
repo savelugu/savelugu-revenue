@@ -28,6 +28,7 @@ var/
 local_settings.py
 db.sqlite3
 media
+.env  ← ✅ Add this line
 
 # Virtual environment folder (adjust if different)
 venv/

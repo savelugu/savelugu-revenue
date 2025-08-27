@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="form-container">
+    <h2>🚫 No Business Found</h2>
+    <p>We couldn't find a registered business linked to your account.</p>
+    <p>If you're a business owner, please register your business first.</p>
+    <a href="{% url 'register_business' %}" class="btn-submit">📝 Register Business</a>
+    <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+  </div>
+{% endblock %}

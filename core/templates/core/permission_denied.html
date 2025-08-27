@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="alert alert-danger mt-4">
+    <h3>🚫 Permission Denied</h3>
+    <p>You do not have access to register a business. Please contact your administrator or log in with an authorized account.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Return Home</a>
+  </div>
+{% endblock %}

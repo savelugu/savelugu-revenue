@@ -1,0 +1,34 @@
+<form method="post" id="payment-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <input type="hidden" name="paystack_reference" id="paystack_reference">
+    <button type="button" id="paystack-button">Pay with Mobile Money</button>
+</form>
+
+<script>
+function initiatePaystack() {
+    fetch("{% url 'start_paystack_payment' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            amount: document.getElementById('id_amount').value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.authorization_url) {
+            window.location.href = data.authorization_url;
+        } else {
+            alert("Error: " + data.error);
+        }
+    });
+}
+</script>
+
+<button type="button" onclick="initiatePaystack()">Pay with Paystack</button>
+

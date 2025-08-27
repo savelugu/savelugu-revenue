@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Savelugu Municipal Assembly",
+        "region": "Northern Region",
+        "type": "Municipality"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.7500, 9.7500],
+            [0.8000, 9.7500],
+            [0.8000, 9.8000],
+            [0.7500, 9.8000],
+            [0.7500, 9.7500]
+          ]
+        ]
+      }
+    }
+  ]
+}

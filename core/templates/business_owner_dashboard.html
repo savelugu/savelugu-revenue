@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Business Owner Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
+    .dashboard-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(2, 133, 17, 1);
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .owner-info {
+        text-align: center;
+        font-size: 15px;
+        margin-bottom: 30px;
+        color: #555;
+    }
+
+    .metrics-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .metric-card {
+        flex: 1 1 200px;
+        background-color: #197e04ff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(13, 130, 2, 1);
+        transition: transform 0.2s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+    .metric-title {
+        font-size: 15px;
+        color: #00e9f9ff;
+        margin-bottom: 8px;
+    }
+    .metric-value {
+        font-size: 22px;
+        color: #fafafa;
+        font-weight: bold;
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+    .styled-table thead tr {
+        background-color: #2ea303ff;
+        color: white;
+        text-align: left;
+    }
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+    }
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .styled-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+    }
+
+    .btn-custom {
+        display: block;
+        width: fit-content;
+        margin: 25px auto 0;
+        padding: 12px 20px;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+    .btn-custom:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2>Welcome, {{ business_owner.business_name }} 👋</h2>
+    <p class="owner-info">
+        📍 {{ business_owner.location }} | 📞 {{ business_owner.phone_number }}
+    </p>
+
+    <!-- Metrics -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-title">Total Paid (GH₵)</div>
+            <div class="metric-value">{{ total_amount|floatformat:2 }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Total Payments</div>
+            <div class="metric-value">{{ total_payments }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Pending</div>
+            <div class="metric-value">{{ pending_count }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Successful</div>
+            <div class="metric-value">{{ success_count }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Failed</div>
+            <div class="metric-value">{{ failed_count }}</div>
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <h3 style="text-align:center; margin-top:30px;">Recent Payments</h3>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Receipt ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>IGF Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.receipt_id }}</td>
+                <td>GH₵ {{ payment.amount }}</td>
+                <td>
+                    {% if payment.status == "success" %}
+                        <span style="color:#28a745; font-weight:bold;">✔ Success</span>
+                    {% elif payment.status == "pending" %}
+                        <span style="color:#ffc107; font-weight:bold;">⏳ Pending</span>
+                    {% else %}
+                        <span style="color:#dc3545; font-weight:bold;">✘ Failed</span>
+                    {% endif %}
+                </td>
+                <td>{{ payment.get_igf_type_display }}</td>
+                <td>{{ payment.timestamp|date:"M d, Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">No payments found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'submit_business_owner_payment' %}" class="btn-custom">➕ Submit New Payment</a>
+</div>
+{% endblock %}
+

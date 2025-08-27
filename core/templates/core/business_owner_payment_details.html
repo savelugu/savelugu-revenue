@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+<style>
+    body {
+            background-image: url("{% static 'core/images/R.png' %}");
+            background-size: cover; /* Makes image fill the page */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Keeps it in place when scrolling */
+            background-position: center;
+        }
+
+    .payment-success-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0, 116, 8, 1);
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .payment-success-container h2 {
+        color: #28a745;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .payment-success-container p {
+        font-size: 16px;
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .payment-success-container p strong {
+        color: #000;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 20px;
+        background-color: #007bff;
+        color: #fff !important;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="payment-success-container">
+    <h2>🎉 Payment Successful</h2>
+    <p><strong>Name:</strong> {{ payment.full_name }}</p>
+    <p><strong>Business:</strong> {{ payment.business }}</p>
+    <p><strong>Amount Paid:</strong> <span style="color:#28a745; font-weight:bold;">GHS {{ payment.amount }}</span></p>
+    <p><strong>IGF Type:</strong> {{ payment.igf_type }}</p>
+    <p><strong>Location:</strong> {{ payment.latitude }}, {{ payment.longitude }}</p>
+
+    <a href="{% url 'business_owner_dashboard' %}" class="btn-primary">⬅ Back to Dashboard</a>
+</div>
+{% endblock %}

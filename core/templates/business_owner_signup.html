@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        animation: fadeInBody 0.8s ease-in;
+    }
+
+    @keyframes fadeInBody {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .signup-container {
+        max-width: 580px;
+        margin: 90px auto;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 8px 22px rgba(2, 118, 12, 1);
+        animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .signup-logo {
+        max-width: 110px;
+        height: auto;
+        border-radius: 14px;
+        margin-bottom: 15px;
+        box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s ease;
+    }
+
+    .signup-logo:hover {
+        transform: scale(1.06);
+    }
+
+    .signup-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #169805;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .signup-container input,
+    .signup-container select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .signup-container input:focus,
+    .signup-container select:focus {
+        border-color: #169805;
+        box-shadow: 0 0 6px rgba(22, 152, 5, 0.35);
+        outline: none;
+    }
+
+    .btn-signup {
+        width: 100%;
+        padding: 14px;
+        background: #169805;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-signup:hover {
+        background: #117a04;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 25px;
+        text-decoration: none;
+        color: #169805;
+        font-weight: bold;
+        font-size: 15px;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #117a04;
+        text-decoration: underline;
+        transform: translateX(-2px);
+    }
+
+    /* Toast Message */
+    .toast-message {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        background-color: #169805;
+        color: white;
+        padding: 14px 24px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        z-index: 9999;
+        animation: fadeInToast 0.5s ease-out;
+    }
+
+    @keyframes fadeInToast {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+{% if messages %}
+<div id="toast-message" class="toast-message">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+<script>
+    setTimeout(() => {
+        const toast = document.getElementById('toast-message');
+        if (toast) toast.style.display = 'none';
+    }, 4000);
+</script>
+{% endif %}
+
+<div class="signup-container">
+    <div class="logo-container">
+        <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo" class="signup-logo">
+    </div>
+
+    <h2>Create Your Business Account</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+
+        <div class="form-group">
+            {{ form.business_name.label_tag }}
+            {{ form.business_name }}
+        </div>
+
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+
+        <div class="form-group">
+            {{ form.phone_number.label_tag }}
+            {{ form.phone_number }}
+        </div>
+
+        <div class="form-group">
+            {{ form.location.label_tag }}
+            {{ form.location }}
+        </div>
+
+        {{ form.latitude }}
+        {{ form.longitude }}
+
+        <div class="form-group">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+        </div>
+
+        <button type="submit" class="btn-signup">Sign Up</button>
+    </form>
+
+    <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+</div>
+{% endblock %}
+
+

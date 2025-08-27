@@ -7,7 +7,7 @@
 
 <style>
     body {
-        background-image: url("{% static 'core/images/R.png' %}");
+        background-image: url("{% static 'core/images/theme.png' %}");
         background-size: cover; /* Makes image fill the page */
         background-repeat: no-repeat;
         background-attachment: fixed; /* Keeps it in place when scrolling */
@@ -19,7 +19,7 @@
         padding: 25px;
         background: rgba(255, 255, 255, 0.9); /* Slight transparency */
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(3, 136, 18, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif;
     }
     .form-container h2 { text-align: center; margin-bottom: 20px; color: #333; }
@@ -39,13 +39,13 @@
     .form-container input:focus,
     .form-container select:focus,
     .form-container textarea:focus {
-        border-color: #2c8c03ff;
+        border-color: #007bff;
         outline: none;
     }
     .btn-submit {
         width: 100%;
         padding: 12px;
-        background: #108a03ff;
+        background: #007bff;
         color: white;
         font-size: 16px;
         border: none;
@@ -124,17 +124,12 @@
 </div>
 
 <script>
-let watchId = null;
-
 function captureGPS() {
     if (navigator.geolocation) {
-        document.getElementById("coords-display").innerHTML = "📡 Capturing GPS... please wait";
-
-        watchId = navigator.geolocation.watchPosition(
+        navigator.geolocation.getCurrentPosition(
             function(position) {
                 let lat = position.coords.latitude;
                 let lng = position.coords.longitude;
-                let accuracy = position.coords.accuracy; // meters
 
                 // Fill hidden fields
                 document.getElementById("id_latitude").value = lat;
@@ -142,29 +137,22 @@ function captureGPS() {
 
                 // Show them on the page
                 document.getElementById("coords-display").innerHTML =
-                    `📍 Coordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>🎯 Accuracy: ±${accuracy.toFixed(1)} m`;
-
-                // If accuracy is good enough (< 15m like Kobo/CSPro), stop tracking
-                if (accuracy <= 15 && watchId !== null) {
-                    navigator.geolocation.clearWatch(watchId);
-                    watchId = null;
-                    document.getElementById("coords-display").innerHTML += "<br>✅ Location locked!";
-                }
+                    `📍 Coordinates captured: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             },
             function(error) {
                 alert("Unable to retrieve GPS location. Please allow location access.");
                 console.warn("GPS error:", error);
-            },
-            {
-                enableHighAccuracy: true,  // force GPS chip
-                timeout: 20000,            // wait up to 20s
-                maximumAge: 0              // don’t use cached
             }
         );
     } else {
         alert("Geolocation is not supported by this browser.");
     }
 }
+
+// Automatically capture GPS when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    captureGPS();
+});
 
 // Ensure GPS is set before submitting
 document.getElementById("businessForm").addEventListener("submit", function(e) {
@@ -177,9 +165,5 @@ document.getElementById("businessForm").addEventListener("submit", function(e) {
     }
 });
 </script>
-
 {% endblock %}
-
-
-
 

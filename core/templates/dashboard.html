@@ -7,26 +7,39 @@
 
 <style>
     body {
-        background-image: url("{% static 'core/images/theme.png' %}");
-        background-size: cover; /* Makes image fill the page */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
         background-repeat: no-repeat;
-        background-attachment: fixed; /* Keeps it in place when scrolling */
+        background-attachment: fixed;
         background-position: center;
     }
+
     .dashboard-container {
         max-width: 1000px;
         margin: 40px auto;
         background: #ffffff;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(2, 133, 17, 1);
     }
+
+    h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
     h2 img {
         height: 70px;
         vertical-align: middle;
         margin-right: 8px;
     }
+
     .filter-form {
         display: flex;
         flex-wrap: wrap;
@@ -64,6 +77,7 @@
     .filter-form .btn:hover {
         background: #0056b3;
     }
+
     .styled-table {
         width: 100%;
         border-collapse: collapse;
@@ -71,7 +85,7 @@
         font-size: 14px;
     }
     .styled-table thead tr {
-        background-color: #007bff;
+        background-color: #2ea303ff;
         color: white;
         text-align: left;
     }
@@ -91,6 +105,38 @@
         padding: 20px;
         color: #777;
     }
+
+    .metrics-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .metric-card {
+        flex: 1 1 250px;
+        background-color: #197e04ff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(13, 130, 2, 1);
+        transition: transform 0.2s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+    .metric-title {
+        font-size: 16px;
+        color: #00e9f9ff;
+        margin-bottom: 10px;
+    }
+    .metric-value {
+        font-size: 24px;
+        color: #fafafaff;
+        font-weight: bold;
+    }
+
     .charts-container {
         margin-top: 40px;
         display: flex;
@@ -102,262 +148,195 @@
         background: #fff;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        max-width: 600px;
+        box-shadow: 0 4px 12px rgba(8, 121, 2, 1);
+        max-width: 1000px;
         width: 100%;
     }
     
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f6f8;
-        margin: 0;
-        padding: 0;
-    }
+    /* === Collector Progress Gauge Styles (Fixed) === */
+.gauge-section {
+  margin: 30px auto;
+  padding: 20px;
+  background: #ffffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(17, 119, 1, 1);
+  text-align: center;
+  max-width: 600px;
+}
 
-    .dashboard-container {
-        max-width: 1000px;
-        margin: 40px auto;
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+.gauge-section .gauge-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
 
-    h2 {
-        font-size: 28px;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        text-align: center;
-    }
+.gauge-section .chart-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 400px;   /* cap height */
+  overflow: hidden;    /* prevent overlap */
+}
 
-    .metrics-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
+.gauge-section .chart-box iframe {
+  width: 100% !important;   /* make iframe fit container */
+  max-width: 900px; 
+  height: 300px !important; /* control gauge height */
+  border: none;
+}
 
-    .metric-card {
-        flex: 1 1 250px;
-        background-color: #fafafa;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease;
-    }
+.gauge-section {
+  width: 100%;             /* Take full width */
+  max-width: 1000px;        /* Increase max width (default ~600px) */
+  margin: 20px auto;       /* Center align with spacing */
+  text-align: center;
+}
 
-    .metric-card:hover {
-        transform: translateY(-5px);
-    }
 
-    .metric-title {
-        font-size: 16px;
-        color: #7f8c8d;
-        margin-bottom: 10px;
-    }
-
-    .metric-value {
-        font-size: 24px;
-        color: #27ae60;
-        font-weight: bold;
-    }
-
-    #analyticsChart {
-        margin-top: 40px;
-        height: 400px;
-        background: linear-gradient(to right, #e0f7fa, #f1f8e9);
-        border: 1px solid #dcdcdc;
-        border-radius: 8px;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-    }
 </style>
+
 <div class="dashboard-container">
-<h2>
+    {% if request.user.is_superuser %}
+    <h2>
         <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo">
         Analytic Metrics
     </h2>
 
-<div class="metrics-grid">
-    <div class="metric-card">
-        <div class="metric-title">Total Revenue</div>
-        <div class="metric-value">GH₵{{ total_revenue }}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Average Daily Revenue</div>
-        <div class="metric-value">GH₵{{ avg_daily|floatformat:2 }}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Top Collector</div>
-        <div class="metric-value">
-            {{ top_collector.collector__username }}<br>
-            <small>(GH₵{{ top_collector.total }})</small>
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-title">Total Revenue</div>
+            <div class="metric-value">GH₵{{ total_revenue }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Average Daily Revenue</div>
+            <div class="metric-value">GH₵{{ avg_daily|floatformat:2 }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Top Collector</div>
+            <div class="metric-value">
+                {{ top_collector.collector__username }}<br>
+                <small>(GH₵{{ top_collector.total }})</small>
+            </div>
         </div>
     </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-title">Total Payments</div>
+            <div class="metric-value">{{ total_payments_count }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Avg Payment (You)</div>
+            <div class="metric-value">GH₵{{ collector_avg_payment|floatformat:2 }}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Peak Collection Day</div>
+            <div class="metric-value">
+                {{ peak_day.date__date }}<br>
+                <small>(GH₵{{ peak_day.total }})</small>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Most Used Method</div>
+            <div class="metric-value">{{ most_used_method.method|capfirst }} ({{ most_used_method.count }})</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Your Contribution</div>
+            <div class="metric-value">{{ collector_contribution_pct|floatformat:1 }}%</div>
+        </div>
+
+        <!-- Target Progress -->
+        <div class="metric-card">
+            <div class="metric-title">Your Target Progress</div>
+            <div class="metric-value">GH₵{{ collector_total }} / {{ collector_target }}</div>
+            <div class="progress" style="height: 20px; background-color: #e9ecef; border-radius: 5px; overflow: hidden;">
+                <div style="
+                    width: {{ collector_progress_pct }}%;
+                    background-color: {% if collector_progress_pct >= 100 %}#28a745{% elif collector_progress_pct >= 75 %}#ffc107{% else %}#dc3545{% endif %};
+                    height: 100%;
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    line-height: 20px;">
+                    {{ collector_progress_pct|floatformat:1 }}%
+                </div>
+            </div>
+            {% if collector_progress_pct < 75 %}
+                <div style="margin-top: 5px; color: #dc3545; font-size: 0.9em;">
+                    ⚠️ You are below target. Keep pushing!
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Daily Tracker -->
+        <div class="metric-card">
+            <div class="metric-title">Today’s Collection</div>
+            <div class="metric-value">GH₵{{ today_total }} / {{ collector_target }}</div>
+            <div class="progress" style="height: 20px; background-color: #e9ecef; border-radius: 5px; overflow: hidden;">
+                <div style="
+                    width: {{ today_progress_pct }}%;
+                    background-color: {% if today_progress_pct >= 100 %}#28a745{% elif today_progress_pct >= 75 %}#ffc107{% else %}#dc3545{% endif %};
+                    height: 100%;
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    line-height: 20px;">
+                    {{ today_progress_pct|floatformat:1 }}%
+                </div>
+            </div>
+        </div>
+
+        <!-- Streak -->
+        <div class="metric-card">
+            <div class="metric-title">Streak</div>
+            <div class="metric-value">
+                {% if streak >= 3 %}
+                    🔥 {{ streak }}-day streak!
+                {% else %}
+                    {{ streak }} day{{ streak|pluralize }} above target
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="metric-card">
+            <div class="metric-title">Milestones</div>
+            <div class="metric-value">
+                {% if milestones %}
+                    {% for badge in milestones %}
+                        <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; margin-right: 4px;">{{ badge }}</span>
+                    {% endfor %}
+                {% else %}
+                    No milestones yet
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Peer Rank -->
+        <div class="metric-card">
+            <div class="metric-title">Global Rank</div>
+            <div class="metric-value">
+                {% if peer_rank %}
+                    🎖️ You're ranked <strong>#{{ peer_rank }}</strong> out of {{ peer_total }} collectors!
+                {% else %}
+                    Not ranked
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    {% endif %}
 </div>
 
-<div class="metrics-grid">
-    <div class="metric-card">
-        <div class="metric-title">Total Payments</div>
-        <div class="metric-value">{{ total_payments_count }}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Avg Payment (You)</div>
-        <div class="metric-value">GH₵{{ collector_avg_payment|floatformat:2 }}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Peak Collection Day</div>
-        <div class="metric-value">
-            {{ peak_day.date__date }}<br>
-            <small>(GH₵{{ peak_day.total }})</small>
-        </div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Most Used Method</div>
-        <div class="metric-value">{{ most_used_method.method|capfirst }} ({{ most_used_method.count }})</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Your Contribution</div>
-        <div class="metric-value">{{ collector_contribution_pct|floatformat:1 }}%</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Your Target Progress</div>
-        <div class="metric-value">GH₵{{ collector_total }} / {{ collector_target }}</div>
-        <div class="progress" style="height: 20px; background-color: #e9ecef; border-radius: 5px; overflow: hidden;">
-            <div style="
-                width: {{ collector_progress_pct }}%;
-                background-color: {% if collector_progress_pct >= 100 %}#28a745{% elif collector_progress_pct >= 75 %}#ffc107{% else %}#dc3545{% endif %};
-                height: 100%;
-                text-align: center;
-                color: white;
-                font-weight: bold;
-                line-height: 20px;">
-                {{ collector_progress_pct|floatformat:1 }}%
-            </div>
-        </div>
-        {% if collector_progress_pct < 75 %}
-            <div style="margin-top: 5px; color: #dc3545; font-size: 0.9em;">
-                ⚠️ You are below target. Keep pushing!
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- 🔹 Daily Target Tracker -->
-    <div class="metric-card">
-        <div class="metric-title">Today’s Collection</div>
-        <div class="metric-value">GH₵{{ today_total }} / {{ collector_target }}</div>
-        <div class="progress" style="height: 20px; background-color: #e9ecef; border-radius: 5px; overflow: hidden;">
-            <div style="
-                width: {{ today_progress_pct }}%;
-                background-color: {% if today_progress_pct >= 100 %}#28a745{% elif today_progress_pct >= 75 %}#ffc107{% else %}#dc3545{% endif %};
-                height: 100%;
-                text-align: center;
-                color: white;
-                font-weight: bold;
-                line-height: 20px;">
-                {{ today_progress_pct|floatformat:1 }}%
-            </div>
-        </div>
-    </div>
-
-    <!-- 🔥 Streak Counter -->
-    <div class="metric-card">
-        <div class="metric-title">Streak</div>
-        <div class="metric-value">
-            {% if streak >= 3 %}
-                🔥 {{ streak }}-day streak!
-            {% else %}
-                {{ streak }} day{{ streak|pluralize }} above target
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- 🏅 Milestone Badges -->
-    <div class="metric-card">
-        <div class="metric-title">Milestones</div>
-        <div class="metric-value">
-            {% if milestones %}
-                {% for badge in milestones %}
-                    <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; margin-right: 4px;">{{ badge }}</span>
-                {% endfor %}
-            {% else %}
-                No milestones yet
-            {% endif %}
-        </div>
-    </div>
-
-        
-    <div class="metric-card">
-        <div class="metric-title">Global Rank</div>
-        <div class="metric-value">
-                
-        {% if peer_rank %}
-            <div class="badge-highlight">
-                🎖️ You're ranked <strong>#{{ peer_rank }}</strong> out of {{ peer_total }} collectors!
-            </div>
-        {% endif %}
-        </div>
-    </div>
-
-    <!-- 📊 Peer Comparison -->
-        
-    <div class="metric-card">
-        <div class="metric-title">Global Rank</div>
-        <div class="metric-value">
-            {% if peer_rank %}
-                You’re #{{ peer_rank }} of {{ peer_total }} collectors
-            {% else %}
-                Not ranked
-            {% endif %}
-        </div>
-    </div>
+<!-- Collector Progress Gauge -->
+<div class="chart-row gauge-section">
+  <h2 class="gauge-title">My Revenue Progress</h2>
+  <div class="chart-box">
+    {{ collector_gauge|safe }}
+  </div>
 </div>
-
-
-<canvas id="peerChart" height="120"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('peerChart').getContext('2d');
-    const peerChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ peer_labels|safe }},
-            datasets: [{
-                label: 'Total Collected',
-                data: {{ peer_values|safe }},
-                backgroundColor: {{ peer_labels|safe }}.map(name =>
-                    name === "{{ request.user.username }}" ? '#007bff' : '#6c757d'
-                ),
-                borderColor: {{ peer_labels|safe }}.map(name =>
-                    name === "{{ request.user.username }}" ? '#ffc107' : '#6c757d'
-                ),
-                borderWidth: {{ peer_labels|safe }}.map(name =>
-                    name === "{{ request.user.username }}" ? 3 : 1
-                ),
-            }]
-        },
-        options: {
-            animation: {
-                duration: 1200,
-                easing: 'easeOutBounce'
-            },
-            responsive: true,
-            plugins: {
-                legend: { display: false },
-                tooltip: { mode: 'index', intersect: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-</script>
-
-
-
-
 
 
 <div class="dashboard-container">
@@ -415,48 +394,6 @@
         </tbody>
     </table>
 
-    <!-- Charts -->
-    <div class="charts-container">
-        <canvas id="revenueChart"></canvas>
-        <canvas id="collectorRevenueChart"></canvas>
-    </div>
-</div>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<canvas id="revenueChart"></canvas>
-
-<script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ labels|safe }},
-            datasets: [{
-                label: 'Revenue Over Time',
-                data: {{ data|safe }},
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true },
-                title: {
-                    display: true,
-                    text: 'Daily Revenue'
-                }
-            }
-        }
-    });
-</script>
-
 {% endblock %}
-
 
 

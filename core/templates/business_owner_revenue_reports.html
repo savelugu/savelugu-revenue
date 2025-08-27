@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+{% if request.user.is_superuser %}
+<style>
+    body {
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .report-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(2, 124, 2, 1);
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #107902ff;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #147c03ff;
+        color: white;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #eafaf1;
+    }
+
+    td {
+        color: #2c3e50;
+    }
+
+    td:last-child {
+        font-weight: bold;
+        color: #27ae60;
+    }
+
+   .chart-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.chart-box {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 25px; /* space between rows */
+  box-shadow: 0 4px 12px rgba(2, 137, 2, 1);
+  transition: transform 0.3s ease;
+}
+
+.chart-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 128, 0, 1);
+}
+
+.gauge-section .chart-row {
+  display: flex;
+  flex-wrap: wrap;         /* allow wrapping */
+  gap: 20px;               /* spacing between gauge cards */
+  justify-content: flex-start;
+}
+
+.gauge-section .chart-box {
+  flex: 1 1 400px;         /* flexible min width ~300px */
+  max-width: 400px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(4, 113, 0, 1);
+}
+
+.gauge-section .gauge-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.gauge-section .gauge-box {
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(20, 132, 0, 1);
+  text-align: center;
+
+  /* control chart size */
+  height: 220px;       /* reduce this number to shrink */
+  overflow: hidden;    /* hides any overflow */
+}
+
+.gauge-section .gauge-box > div {
+  height: 100% !important;  /* force plotly div to fit */
+}
+
+
+
+    .metric-title,
+.metric-value {
+  color: #00e9f9ff; /* Bright cyan for both */
+  text-align: center;
+}
+
+.metric-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+    .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #0f8f03ff, #070291ff);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(18, 125, 2, 1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  animation: fadeInUp 0.6s forwards;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(19, 125, 0, 1);
+}
+
+.metric-title {
+        font-size: 16px;
+        color: #00e9f9ff;
+        margin-bottom: 10px;
+    }
+    .metric-value {
+        font-size: 24px;
+        color: #fafafaff;
+        font-weight: bold;
+    }
+
+.fade-in.delay-1 { animation-delay: 0.2s; }
+.fade-in.delay-2 { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+</style>
+
+<div class="report-container">
+  <h2 style="margin-bottom: 30px;">
+    <img src="{% static 'core/images/cropped.png' %}" alt="Business Logo" style="height: 50px; vertical-align: middle; margin-right: 8px;">
+    Business Owner Revenue Records
+  </h2>
+
+    <div class="metrics-grid">
+    <div class="metric-card fade-in">
+        <div class="metric-title">💰 Total Revenue</div>
+        <div class="metric-value">GHS {{ total_revenue|floatformat:2 }}</div>
+    </div>
+
+    <div class="metric-card fade-in delay-1">
+        <div class="metric-title">🏆 Top Business</div>
+        <div class="metric-value">
+        {{ top_business.business_owner__name|default:"—" }} — GHS {{ top_business.total|default:0|floatformat:2 }}
+        </div>
+    </div>
+
+    <div class="metric-card fade-in delay-2">
+        <div class="metric-title">📦 Total Payments</div>
+        <div class="metric-value">{{ records|length }}</div>
+    </div>
+    </div>
+
+
+    <div class="metrics-grid" style="margin-top: 24px;">
+  <div class="metric-card fade-in delay-1">
+    <div class="metric-title">Top IGF Type</div>
+    <div class="metric-value">
+      {% regroup records by igf_type as igf_groups %}
+      {% with igf_groups.0.grouper as top_igf %}
+        {{ top_igf|title }}
+      {% endwith %}
+    </div>
+  </div>
+
+  <div class="metric-card fade-in delay-2">
+    <div class="metric-title">Top Collector</div>
+    <div class="metric-value">
+      {% regroup records by submitted_by as collector_groups %}
+      {% with collector_groups.0.grouper as top_collector %}
+        {{ top_collector.get_full_name|default:top_collector.username }}
+      {% endwith %}
+    </div>
+  </div>
+</div>
+
+<div class="chart-row">
+  <div class="chart-box">
+    {{ igf_chart|safe }}
+  </div>
+</div>
+
+
+<div class="chart-row">
+  <div class="chart-box">
+    {{ line_chart|safe }}
+  </div>
+</div>
+
+<!-- Gauge charts section -->
+<div class="gauge-section">
+  <h2 class="gauge-title">Top 4 Business Owners - Payment Performance</h2>
+  <div class="gauge-row">
+    {% for chart in gauge_charts %}
+      <div class="gauge-box">
+        {{ chart|safe }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+
+    <table class="revenue-table" style="margin-top: 20px;">
+        <tr>
+            <th>Date</th>
+            <th>Business</th>
+            <th>IGF Type</th>
+            <th>Amount (GHS)</th>
+            <th>Submitted By</th>
+            <th>Status</th>
+        </tr>
+        {% for r in records %}
+        <tr>
+            <td>{{ r.timestamp|date:"F j, Y" }}</td>
+            <td>{{ r.business.business_name }}</td>
+            <td>{{ r.igf_type|title }}</td>
+            <td>{{ r.amount|floatformat:2 }}</td>
+            <td>{{ r.submitted_by.get_full_name|default:r.submitted_by.username }}</td>
+            <td>{{ r.status|title }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No revenue records available.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% else %}
+<p style="text-align:center; margin-top:50px; font-size:18px; color:red;">
+    🚫 You are not authorized to view this page.
+</p>
+{% endif %}
+{% endblock %}

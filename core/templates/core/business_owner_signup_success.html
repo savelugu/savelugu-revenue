@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Signup Successful{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .success-box {
+        max-width: 600px;
+        margin: 80px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(2, 122, 0, 1);
+        text-align: center;
+    }
+    .ok-btn {
+        background: #169805;
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        display: inline-block;
+        margin-top: 20px;
+        transition: background 0.3s ease;
+    }
+    .ok-btn:hover {
+        background: #117a04;
+    }
+</style>
+
+<div class="success-box">
+    <h2>🎉 Account Created Successfully!</h2>
+    <p>Your business owner account has been registered.</p>
+
+    <h3>📋 Account Information</h3>
+    <ul style="text-align:left; display:inline-block; margin-top:15px;">
+        <li><strong>Username:</strong> {{ user.username }}</li>
+        <li><strong>Business Name:</strong> {{ owner.business_name }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Phone Number:</strong> {{ owner.phone_number }}</li>
+        <li><strong>Location:</strong> {{ owner.location }}</li>
+        <li><strong>Latitude:</strong> {{ owner.latitude }}</li>
+        <li><strong>Longitude:</strong> {{ owner.longitude }}</li>
+    </ul>
+
+    <!-- ✅ OK button to go to login page -->
+    <a href="{% url 'business_owner_login' %}" class="ok-btn">OK</a>
+</div>
+{% endblock %}

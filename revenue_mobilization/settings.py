@@ -42,14 +42,14 @@ SECRET_KEY = "django-insecure-qdvc=90f%uu!5-0!)ubp$tao@**^n(fp0^jv3-2)i0=e$**ys*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
-import dj_database_url
+#import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
-}
+#DATABASES = {
+    #'default': dj_database_url.config(default=config('DATABASE_URL'))
+#}
 
 
 # Application definition
@@ -73,9 +73,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware", 
+    
 ]
 
-ROOT_URLCONF = "revenue_mobilization.urls"
+ROOT_URLCONF = "savelugu_revenue.urls"
 
 AUTH_USER_MODEL = 'core.User'
 
@@ -95,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "revenue_mobilization.wsgi.application"
+WSGI_APPLICATION = "savelugu_revenue.wsgi.application"
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'collector_dashboard'
@@ -108,12 +109,12 @@ LOGOUT_REDIRECT_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-#DATABASES = {
-    # "default": {
-        # "ENGINE": "django.db.backends.sqlite3",
-        # "NAME": BASE_DIR / "db.sqlite3",
-    # }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 
 # Password validation
@@ -133,6 +134,8 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000"]
 
 
 # Internationalization
@@ -156,3 +159,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Paystack API Keys
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+
+
+

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Page Background */
+    body {
+        background-image: url("{% static 'core/images/R.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Login Card */
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(8, 122, 2, 1);
+        animation: fadeInContainer 0.6s ease-in;
+        text-align: center;
+    }
+
+    @keyframes fadeInContainer {
+        from { opacity: 0; transform: translateY(-10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo */
+    .login-container img {
+        display: block;
+        margin: 0 auto 15px auto;
+        height: 80px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Header */
+    .login-container h2 {
+        margin-bottom: 25px;
+        font-size: 24px;
+        color: #169805ff;
+    }
+
+    /* Inputs */
+    .login-container input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 20px;
+        font-size: 15px;
+        background: #0a7702ff;
+        color: #fff;
+        box-shadow: inset 3px 3px 5px rgba(0,0,0,0.6),
+                    inset -3px -3px 5px rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .login-container input:hover {
+        background: #444;
+    }
+
+    .login-container input:focus {
+        outline: none;
+        background: #555;
+    }
+
+    /* Login Button */
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 20px;
+        border: none;
+        background: linear-gradient(145deg, #169805ff, #117a04);
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 3px 3px 6px rgba(0,0,0,0.5),
+                    -3px -3px 6px rgba(255,255,255,0.1);
+    }
+
+    .btn-login:hover {
+        background: linear-gradient(145deg, #117a04, #0f5d03);
+        transform: translateY(-3px);
+    }
+
+    /* Extra Links */
+    .extra-links {
+        margin-top: 18px;
+        font-size: 14px;
+    }
+
+    .extra-links a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    /* Signup Section */
+    .signup-section {
+        margin-top: 25px;
+    }
+
+    .btn-outline-primary {
+        display: inline-block;
+        border: 2px solid #169805ff;
+        color: #169805ff;
+        border-radius: 20px;
+        padding: 10px 24px;
+        font-weight: bold;
+        font-size: 15px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #169805ff;
+        color: white;
+    }
+
+    /* Back to Home */
+    .back-home {
+        margin-top: 20px;
+    }
+
+    .back-home a {
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .back-home a:hover {
+        color: #007bff;
+    }
+</style>
+
+<div class="login-container my_custom_login_design">
+    <!-- Logo -->
+    <img src="{% static 'core/images/cropped.png' %}" alt="Logo">
+
+    <!-- Heading -->
+    <h2>Business Owner Login</h2>
+
+    <!-- Login Form -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-login">Log In</button>
+    </form>
+
+    <!-- Forgot Password -->
+    <div class="extra-links">
+        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+    </div>
+
+    <!-- Signup Section -->
+    <div class="signup-section">
+        <p>Don’t have an account?</p>
+        <a href="{% url 'business_owner_signup' %}" class="btn-outline-primary">
+            Sign Up as Business Owner
+        </a>
+    </div>
+
+    <!-- Back to Home -->
+    <div class="back-home">
+        <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Savelugu Business Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-top: 20px;
+            color: #2c3e50;
+        }
+
+        .map-title {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        #map {
+            height: 90vh;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+        }
+
+        .leaflet-popup-content {
+            font-size: 14px;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .leaflet-popup-tip {
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            #map {
+                height: 80vh;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Savelugu Municipal Business Map</h1>
+    <div class="map-title">Registered Businesses with GPS</div>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        const map = L.map('map', {
+            center: [9.6, -0.8], // Savelugu center
+            zoom: 13,
+            maxBounds: [
+                [9.45, -0.95], // Southwest corner
+                [9.85, -0.65]  // Northeast corner
+            ],
+            maxBoundsViscosity: 1.0
+        });
+
+        map.setMinZoom(12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        fetch("{% url 'business_geojson' %}")
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+                    }
+                }).addTo(map);
+            });
+    </script>
+
+</body>
+</html>

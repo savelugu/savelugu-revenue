@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    .form-container {
+        max-width: 500px;
+        margin: 80px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .form-container label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-container input,
+    .form-container select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border 0.3s ease;
+    }
+
+    .form-container input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: #28a745;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 25px;
+        transition: background 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background: #218838;
+    }
+
+    .error {
+        color: red;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Register Business Owner</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <small>{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+        <button type="submit" class="btn-submit">Register Business Owner</button>
+    </form>
+</div>
+
+
+<script>
+function captureGPS() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+
+                // Fill hidden fields
+                document.getElementById("id_latitude").value = lat;
+                document.getElementById("id_longitude").value = lng;
+
+                // Show them on the page
+                document.getElementById("coords-display").innerHTML =
+                    `📍 Coordinates captured: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            },
+            function(error) {
+                alert("Unable to retrieve GPS location. Please allow location access.");
+                console.warn("GPS error:", error);
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// Automatically capture GPS when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    captureGPS();
+});
+
+// Ensure GPS is set before submitting
+document.getElementById("businessForm").addEventListener("submit", function(e) {
+    let lat = document.getElementById("id_latitude").value;
+    let lng = document.getElementById("id_longitude").value;
+
+    if (!lat || !lng) {
+        e.preventDefault();
+        alert("Please capture your GPS location before submitting.");
+    }
+});
+</script>
+{% endblock %}
+

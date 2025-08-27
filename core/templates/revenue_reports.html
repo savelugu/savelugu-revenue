@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<style>
 
+{% if request.user.is_superuser %}
+<style>
     body {
-        background-image: url("{% static 'core/images/theme.png' %}");
+        background-image: url("{% static 'core/images/R.png' %}");
         background-size: cover; /* Makes image fill the page */
         background-repeat: no-repeat;
         background-attachment: fixed; /* Keeps it in place when scrolling */
@@ -23,12 +24,12 @@
         background-color: #ffffff;
         padding: 30px;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(2, 124, 2, 1);
     }
 
     h2 {
         font-size: 28px;
-        color: #2c3e50;
+        color: #107902ff;
         margin-bottom: 30px;
         text-align: center;
     }
@@ -45,7 +46,7 @@
     }
 
     th {
-        background-color: #34495e;
+        background-color: #147c03ff;
         color: white;
         font-weight: 600;
     }
@@ -91,5 +92,10 @@
         {% endfor %}
     </table>
 </div>
+{% else %}
+<p style="text-align:center; margin-top:50px; font-size:18px; color:red;">
+    🚫 You are not authorized to view this page.
+</p>
+{% endif %}
 {% endblock %}
 

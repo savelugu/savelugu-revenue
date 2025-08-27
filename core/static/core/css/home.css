@@ -1,0 +1,242 @@
+body {
+    background-image: url("../images/theme.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+    z-index: -1;
+}
+
+/* Loader */
+#loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #099513;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Fade-in */
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+}
+
+/* Layout */
+.home-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+    margin: 60px auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.home-image {
+    flex: 1 1 300px;
+    padding: 20px;
+    text-align: center;
+}
+
+.home-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.home-image img:hover {
+    transform: scale(1.03);
+}
+
+.logo {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.home-content {
+    flex: 1 1 400px;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.home-content h1 {
+    color: #05891d;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.quote {
+    font-style: italic;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.home-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+.home-links a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: #099513;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.home-links a:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.home-links img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 6px;
+    transition: transform 0.3s ease;
+}
+
+.home-links a:hover img {
+    transform: scale(1.2);
+}
+
+/* Cards */
+.info-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 40px auto;
+    max-width: 1000px;
+}
+
+.info-card {
+    flex: 1 1 280px;
+    background: linear-gradient(135deg, #099513 0%, #05891d 100%);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    padding: 30px 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: white;
+}
+
+.info-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+    
+}
+
+/* Card Titles and Text */
+.info-card h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.info-card p {
+    font-size: 15px;
+}
+
+/* Animation Delays */
+.card-1 { animation-delay: 0.2s; }
+.card-2 { animation-delay: 0.4s; }
+.card-3 { animation-delay: 0.6s; }
+
+/* Keyframe Animations */
+@keyframes fadeUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-wrapper {
+        flex-direction: column;
+        margin: 30px 10px;
+    }
+
+    .home-content {
+        padding: 20px;
+    }
+
+    .home-content h1 {
+        font-size: 22px;
+    }
+
+    .quote {
+        font-size: 14px;
+    }
+
+    .info-cards {
+        flex-direction: column;
+        gap: 16px;
+        padding: 0 10px;
+    }
+
+    .info-card {
+        padding: 20px;
+    }
+
+    .info-card h2 {
+        font-size: 18px;
+    }
+
+    .info-card p {
+        font-size: 14px;
+    }
+
+    .home-links {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .home-links a {
+        font-size: 13px;
+        padding: 8px;
+    }
+}

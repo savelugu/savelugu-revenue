@@ -4,6 +4,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
 <style>
     body {
         background-image: url("{% static 'core/images/theme.png' %}");
@@ -11,6 +12,16 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(to bottom right, rgba(2, 139, 7, 1), rgba(15, 140, 4, 1));
+        z-index: -1;
     }
 
     .home-wrapper {
@@ -22,7 +33,7 @@
         margin: 60px auto;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 18px rgba(6, 122, 2, 1);
         overflow: hidden;
     }
 
@@ -30,80 +41,6 @@
         flex: 1 1 300px;
         padding: 20px;
         text-align: center;
-    }
-
-    .home-image img {
-        max-width: 100%;
-        height: 300;
-        border-radius: 8px;
-    }
-
-    .home-content {
-        flex: 1 1 400px;
-        padding: 40px 30px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-    }
-
-    .home-content h1 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 28px;
-    }
-
-    .home-content p {
-        color: #555;
-        font-size: 16px;
-        margin-bottom: 30px;
-    }
-
-    .home-links {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .home-links li {
-        margin: 12px 0;
-    }
-
-    .home-links a {
-        display: inline-block;
-        background: #007bff;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 15px;
-        transition: background 0.3s ease;
-    }
-
-    .home-links a:hover {
-        background: #0056b3;
-    }
-
-    .home-links img {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
-        margin-right: 8px;
-    }
-
-    @keyframes scaleIn {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.03); }
-        100% { transform: scale(1); }
     }
 
     .home-image img {
@@ -118,140 +55,198 @@
         animation: pulse 0.6s ease-in-out;
     }
 
-        /* TEXT ANIMATION */
-    @keyframes fadeUp {
-        0% {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-        100% {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .home-text {
-        animation: fadeUp 0.8s ease-out;
-        animation-delay: 0.2s;
-        animation-fill-mode: both;
-    }
-
-    /* BUTTON ENTRANCE */
-    @keyframes slideBounce {
-        0% {
-            transform: translateX(-100px);
-            opacity: 0;
-        }
-        60% {
-            transform: translateX(10px);
-            opacity: 1;
-        }
-        100% {
-            transform: translateX(0);
-        }
-    }
-
-    .home-buttons button {
-        animation: slideBounce 0.9s ease-out;
-        animation-delay: 0.5s;
-        animation-fill-mode: both;
-        margin: 0.5em;
-        padding: 0.6em 1.2em;
-        border: none;
-        border-radius: 6px;
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: box-shadow 0.3s ease, transform 0.2s ease;
-    }
-
-    /* BUTTON HOVER EFFECT */
-    .home-buttons button:hover {
-        box-shadow: 0 0 12px rgba(0, 123, 255, 0.6);
-        transform: scale(1.05);
-    }
-
-    /* TEXT ANIMATION */
-@keyframes fadeUp {
-    0% {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-        }
-    }
-
-    .home-content h1,
-    .home-content p {
-        animation: fadeUp 0.8s ease-out;
-        animation-fill-mode: both;
+    .home-content {
+        flex: 1 1 400px;
+        padding: 40px 30px;
+        text-align: center;
     }
 
     .home-content h1 {
-        animation-delay: 0.2s;
+        color: #05891dff;
+        font-size: 28px;
+        margin-bottom: 20px;
+        animation: fadeUp 0.2s ease-out both;
     }
 
     .home-content p {
-        animation-delay: 0.4s;
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 20px;
+        animation: fadeUp 0.4s ease-out both;
     }
 
-    /* BUTTON ANIMATION */
-    @keyframes slideBounce {
-        0% {
-            transform: translateX(-100px);
-            opacity: 0;
-        }
-        60% {
-            transform: translateX(10px);
-            opacity: 1;
-        }
-        100% {
-            transform: translateX(0);
-        }
+    .home-links {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        justify-items: center;
+        margin-top: 20px;
     }
 
     .home-links li {
-        animation: slideBounce 0.9s ease-out;
-        animation-fill-mode: both;
+        flex: 0 0 auto;
     }
 
-    .home-links li:nth-child(1) {
-        animation-delay: 0.6s;
-    }
-
-    .home-links li:nth-child(2) {
-        animation-delay: 0.8s;
-    }
-
-    /* BUTTON STYLE ENHANCEMENT */
     .home-links a {
-        display: inline-block;
-        background: #007bff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #099513ff;
         color: white;
-        padding: 12px 20px;
-        border-radius: 6px;
+        text-align: center;
         text-decoration: none;
-        font-size: 15px;
-        transition: background 0.3s ease, transform 0.2s ease;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(17, 144, 3, 1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 14px;
+        padding: 10px;
     }
 
     .home-links a:hover {
-        background: #0056b3;
+        background-color: #0056b3;
         transform: scale(1.05);
     }
 
     .home-links img {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
-        margin-right: 8px;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 6px;
+        transition: transform 0.3s ease;
     }
 
+    .home-links a:hover img {
+        transform: scale(1.2);
+    }
 
+    .info-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin: 40px auto;
+        max-width: 1000px;
+        animation: fadeUp 0.8s ease-out;
+    }
 
+    .info-card {
+        flex: 1 1 280px;
+        background: green;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(13, 136, 2, 1);
+        padding: 30px 20px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeUp 0.8s ease-out;
+        animation-fill-mode: both;
+        
+    }
+
+    .info-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+    }
+
+    .info-card h2 {
+        font-size: 22px;
+        color: #ffffffff;
+        margin-bottom: 12px;
+    }
+
+    .info-card p {
+        font-size: 15px;
+        color: #fffafaff;
+    }
+
+    .card-1 { animation-delay: 0.2s; }
+    .card-2 { animation-delay: 0.4s; }
+    .card-3 { animation-delay: 0.6s; }
+
+    /* ✅ Centered Quote Rotator */
+    .quote-rotator {
+        display: block;
+        margin: 30px auto;
+        text-align: center;
+        font-size: 18px;
+        font-style: italic;
+        color: #027a1a;
+        background: rgba(255,255,255,0.85);
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(3, 153, 3, 1);
+        max-width: 950px;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 13px;
+        color: #27b507b5;
+    }
+
+    @keyframes scaleIn {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes fadeUp {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .home-wrapper {
+            flex-direction: column;
+            margin: 30px 10px;
+        }
+
+        .home-content {
+            padding: 20px;
+        }
+
+        .home-content h1 {
+            font-size: 22px;
+        }
+
+        .home-content p {
+            font-size: 14px;
+        }
+
+        .info-cards {
+            flex-direction: column;
+            gap: 16px;
+            padding: 0 10px;
+        }
+
+        .info-card {
+            padding: 20px;
+        }
+
+        .info-card h2 {
+            font-size: 18px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+        }
+    }
 </style>
 
 <div class="home-wrapper">
@@ -260,31 +255,89 @@
     </div>
 
     <div class="home-content">
-        <div class="welcome-section">
-        <h1 class="welcome-title">🚀 Welcome to <span>Revenue Mobilization App</span></h1>
-        <p class="welcome-subtitle">
-            Your centralized dashboard for <strong>business registration</strong>, <strong>payment tracking</strong>, and <strong>revenue insights</strong>.
-        </p>
-    </div>
+        <h1>
+        <img src="{% static 'core/images/cropped.png' %}" alt="Logo" style="height:40px; vertical-align:middle; margin-right:8px;">
+        Welcome to <span>Savelugu Municipal Assembly Revenue Mobilization App</span>
+        </h1>
 
+        <div class="info-cards">
+            <div class="info-card card-1">
+                <p>Your centralized dashboard for <strong>business registration</strong>, 
+                <strong>payment tracking</strong>, and <strong>revenue insights</strong>.</p>
+            </div>
+        </div>
 
         <ul class="home-links">
             <li>
                 <a href="{% url 'register_business' %}">
-                    <img src="{% static 'core/images/rev.png' %}" alt="Register Icon">
-                    Register a Business
+                    <img src="{% static 'core/images/cropped.png' %}" alt="Register Icon">
+                    Register
                 </a>
             </li>
             <li>
                 <a href="{% url 'business_success' %}">
-                    <img src="{% static 'core/images/coat.png' %}" alt="Success Icon">
-                    View Registration Success Page
+                    <img src="{% static 'core/images/cropped.png' %}" alt="Success Icon">
+                    Success
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'business_owner_login' %}">
+                    <img src="{% static 'core/images/cropped.png' %}" alt="Success Icon">
+                    Login / Register Business Owner
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'access' %}">
+                    <img src="{% static 'core/images/cropped.png' %}" alt="Success Icon">
+                    Login Collector
                 </a>
             </li>
         </ul>
     </div>
 </div>
+
+<div class="info-cards">
+    <div class="info-card card-1">
+        <h2>🚀 Welcome</h2>
+        <p>Welcome to <strong>Savelugu Municipal Assembly Revenue Mobilization App</strong></p>
+    </div>
+
+    <div class="info-card card-2">
+        <h2>📊 Dashboard</h2>
+        <p>Your centralized dashboard for <strong>business registration</strong>, 
+        <strong>payment tracking</strong>, and <strong>revenue insights</strong>.</p>
+    </div>
+
+    <div class="info-card card-3">
+        <h2>💼 Impact</h2>
+        <p>Over <strong>1,200 businesses</strong> registered. Join the movement to digitize Savelugu's economy.</p>
+    </div>
+</div>
+
+<!-- ✅ Quote Rotator Section -->
+<div class="quote-rotator">
+    <p id="quote-text">{{ random_quote }}</p>
+</div>
+
+<footer>
+    &copy; {{ year|default:"2025" }} Savelugu Municipal Assembly. All rights reserved.
+</footer>
+
+<!-- ✅ JavaScript Quote Rotator -->
+<script>
+    const quotes = {{ quotes|safe }};  // passed from Django view
+    let index = 0;
+    const quoteText = document.getElementById("quote-text");
+
+    setInterval(() => {
+        index = (index + 1) % quotes.length;
+        quoteText.style.opacity = 0;
+        setTimeout(() => {
+            quoteText.textContent = quotes[index];
+            quoteText.style.opacity = 1;
+        }, 500);
+    }, 5000); // rotate every 5s
+</script>
+
 {% endblock %}
-
-
 

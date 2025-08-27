@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <style>
+  body {
+    background-color: #e8f5e9;
+  }
+
   .success-container {
     max-width: 600px;
     margin: 60px auto;
@@ -48,6 +51,17 @@
   .btn-submit-again:hover {
     background-color: #388e3c;
   }
+
+  .paystack-ref {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .paystack-ref strong {
+    color: #1e88e5;
+  }
 </style>
 
 <div class="success-container">
@@ -60,6 +74,12 @@
     <p><strong>Receipt ID:</strong> {{ payment.receipt_id }}</p>
     <p><strong>Date:</strong> {{ payment.date|date:"F j, Y, g:i a" }}</p>
   </div>
+
+  {% if payment.paystack_reference %}
+    <div class="paystack-ref">
+      <p><strong>Paystack Reference:</strong> {{ payment.paystack_reference }}</p>
+    </div>
+  {% endif %}
 
   <a href="{% url 'submit_payment' %}" class="btn-submit-again">Submit Another Payment</a>
 </div>

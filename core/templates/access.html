@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{% static 'core/images/theme.png' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+        max-width: 900px;
+        margin: 60px auto;
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .form-box {
+        flex: 1;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        min-width: 300px;
+    }
+
+    .form-box h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-box label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .form-box input,
+    .form-box select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .form-box small {
+        display: block;
+        margin-top: 5px;
+        color: #666;
+        font-size: 12px;
+    }
+
+    .error {
+        color: red;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+
+    .btn-register {
+        background: #28a745;
+    }
+
+    .btn-register:hover {
+        background: #218838;
+    }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latInput = document.getElementById("latitude");
+            const longInput = document.getElementById("longitude");
+            if (latInput && longInput) {
+                latInput.value = position.coords.latitude;
+                longInput.value = position.coords.longitude;
+            }
+        }, function(error) {
+            console.warn("GPS error:", error.message);
+        });
+    } else {
+        console.warn("Geolocation not supported.");
+    }
+});
+</script>
+
+<div class="form-container">
+    <!-- Login Form -->
+    <div class="form-box">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ login_form.as_p }}
+            <button type="submit" name="login_submit" class="btn-submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Business Registration Form (Role-Based) -->
+    {% if request.user.is_authenticated and request.user.role in 'admin business' %}
+        <div class="form-box">
+            <h2>Register Business</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in business_form %}
+                    {% if field.name != 'latitude' and field.name != 'longitude' %}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    {% else %}
+                        {{ field }}  {# Hidden GPS fields #}
+                    {% endif %}
+                {% endfor %}
+                <button type="submit" name="signup_submit" class="btn-submit btn-register">Create Business</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="form-box">
+            <h2>Access Restricted</h2>
+            <p style="color: red; text-align: center;">
+                🚫 You do not have permission to register a business.<br>
+                Please contact your administrator or log in with an authorized account.
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

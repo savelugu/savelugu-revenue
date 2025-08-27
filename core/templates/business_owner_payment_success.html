@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    background-color: #f0fff4;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+  }
+
+  .success-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #ffffff;
+    border: 2px solid #169805ff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(22, 152, 5, 0.2);
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .success-container h2 {
+    color: #169805ff;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+  }
+
+  .success-details p {
+    font-size: 18px;
+    margin: 12px 0;
+  }
+
+  .success-details strong {
+    color: #117a04;
+  }
+
+  .btn-submit-again {
+    display: block;
+    margin: 30px auto 0;
+    background-color: #169805ff;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(22, 152, 5, 0.3);
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-submit-again:hover {
+    background-color: #117a04;
+  }
+</style>
+
+<div class="success-container">
+  <h2>✅ Payment Submitted Successfully</h2>
+
+  <div class="success-details">
+    <p><strong>Business:</strong> {{ payment.business.business_name|default:"N/A" }}</p>
+
+
+    <p><strong>Amount:</strong> GHS {{ payment.amount|floatformat:2 }}</p>
+    <p><strong>IGF Type:</strong> {{ payment.igf_type|default:"N/A" }}</p>
+    <p><strong>Method:</strong> Cash</p>
+    <p><strong>Receipt ID:</strong> {{ payment.receipt_id|default:"N/A" }}</p>
+    <p><strong>Date:</strong> {{ payment.timestamp|date:"F j, Y, g:i a" }}</p>
+  </div>
+
+  <a href="{% url 'submit_business_owner_payment' %}" class="btn-submit-again">Submit Another Payment</a>
+</div>
+{% endblock %}
