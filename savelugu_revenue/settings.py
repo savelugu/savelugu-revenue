@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,6 +46,11 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+
+# CSRF trusted origins (for HTTPS requests)
+CSRF_TRUSTED_ORIGINS = [
+    "https://savelugu-revenue.onrender.com",
+]
 
 
 
