@@ -2,10 +2,39 @@ from django.contrib import admin
 from .models import User, Business, Payment,BusinessOwner,BusinessOwnerPayment
 from django.contrib.auth.admin import UserAdmin
 
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import User
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('username', 'email', 'role', 'phone_number')
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'role', 'phone_number')
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
     model = User
     list_display = ['username', 'email', 'role', 'is_staff']
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password', 'role', 'phone_number')}),
+        ('Permissions', {'fields': ('is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2', 'role', 'phone_number', 'is_staff', 'is_superuser'),
+        }),
+    )
+
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):

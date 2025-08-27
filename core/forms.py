@@ -38,6 +38,15 @@ class CustomLoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'})
     )
 
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        # Optional: restrict login if role is not allowed
+        if user.role not in ['collector', 'admin', 'business']:
+            raise forms.ValidationError(
+                "Your account role does not have access.",
+                code='invalid_role'
+            )
+
 class BusinessForm(forms.ModelForm):
     class Meta:
         model = Business
