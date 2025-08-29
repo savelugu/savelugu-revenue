@@ -4,7 +4,7 @@ from .views import run_migrations,business_owner_view,start_paystack_payment, ve
 from .views import login_signup_view,submit_payment_business_view,submit_business_owner_payment_view,payment_list_view,business_owner_revenue_reports_view
 from django.contrib.auth import views as auth_views
 from core.views import BusinessOwnerLoginView
-
+from django.shortcuts import render
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -95,7 +95,9 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(template_name="registration/password_reset_complete.html"), 
          name='password_reset_complete'),
 
-    
+    path('privacy/', lambda request: render(request, 'privacy_policy.html'), name='privacy'),
+    path('terms/', lambda request: render(request, 'terms_of_service.html'), name='terms'),
+    path('contact/', lambda request: render(request, 'contact.html'), name='contact'),
 ]
     
     

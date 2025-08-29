@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- AOS CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Segoe UI', 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #e9f5ec, #fdfdfd);
+        margin: 0;
+        padding: 0;
+    }
+
+    .contact-container {
+        max-width: 850px;
+        margin: 70px auto;
+        padding: 40px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in-out;
+        transition: all 0.3s ease;
+    }
+
+    .contact-container:hover {
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.15);
+    }
+
+    .contact-container h2 {
+        font-size: 2.3rem;
+        color: #28a745;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .contact-container p {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        color: #555;
+    }
+
+    .contact-container ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 35px;
+        text-align: center;
+    }
+
+    .contact-container ul li {
+        margin: 12px 0;
+        font-size: 1.1rem;
+        color: #333;
+        transition: transform 0.2s ease, color 0.3s ease;
+    }
+
+    .contact-container ul li:hover {
+        transform: translateY(-2px);
+        color: #28a745;
+    }
+
+    .contact-container ul li strong {
+        color: #28a745;
+    }
+
+    .contact-container h3 {
+        font-size: 1.6rem;
+        margin-bottom: 18px;
+        color: #222;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .contact-container form {
+        display: grid;
+        gap: 18px;
+        animation: slideUp 1s ease-in-out;
+    }
+
+    .contact-container input,
+    .contact-container textarea {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-container input:focus,
+    .contact-container textarea:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+        outline: none;
+    }
+
+    .contact-container button {
+        padding: 14px;
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.05rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-container button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(33, 136, 56, 0.3);
+    }
+
+    .back-home {
+        text-align: center;
+        margin: 40px 0;
+    }
+
+    .back-home .back-link {
+        text-decoration: none;
+        font-size: 1rem;
+        color: #28a745;
+        border: 1px solid #28a745;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .back-home .back-link:hover {
+        background: #28a745;
+        color: white;
+    }
+
+    /* Optional Map Styling */
+    .map-container {
+        margin-top: 40px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .contact-container {
+            margin: 30px 15px;
+            padding: 25px;
+        }
+
+        .contact-container h2 {
+            font-size: 2rem;
+        }
+
+        .contact-container h3 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<div class="contact-container" data-aos="fade-up">
+    <h2>Contact Us</h2>
+    <p>If you have any questions, concerns, or need support, reach us via:</p>
+    <ul data-aos="fade-in" data-aos-delay="100">
+        <li><strong>📍 Address:</strong> Savelugu Municipal Assembly, Northern Region, Ghana</li>
+        <li><strong>📧 Email:</strong> support@savelugu.gov.gh</li>
+        <li><strong>📞 Phone:</strong> +233 24 123 4567</li>
+    </ul>
+
+    <h3 data-aos="fade-right" data-aos-delay="200">Send Us a Message</h3>
+    <form method="post" data-aos="zoom-in-up" data-aos-delay="300">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <!-- Optional Map -->
+    <div class="map-container" data-aos="fade-up" data-aos-delay="400">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.52171384572!2d-0.8333!3d9.6242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSavelugu%20Municipal%20Assembly!5e0!3m2!1sen!2sgh!4v1688747399381!5m2!1sen!2sgh" 
+            width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+    </div>
+</div>
+
+<div class="back-home">
+    <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+</div>
+
+<!-- AOS JS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+</script>
+
+{% endblock %}
+
+

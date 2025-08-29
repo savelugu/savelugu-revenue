@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- AOS Animation CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f4fdf7, #ffffff);
+        margin: 0;
+        padding: 0;
+    }
+
+    .policy-container {
+        max-width: 900px;
+        margin: 70px auto;
+        padding: 45px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+        color: #222;
+        line-height: 1.9;
+        animation: fadeIn 1s ease-in-out;
+        transition: all 0.3s ease;
+    }
+
+    .policy-container:hover {
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
+    }
+
+    .policy-container h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 35px;
+        color: #28a745;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .policy-container h3 {
+        margin-top: 35px;
+        font-size: 1.5rem;
+        color: #2c3e50;
+        font-weight: 600;
+        border-left: 4px solid #28a745;
+        padding-left: 12px;
+        position: relative;
+    }
+
+    .policy-container h3::after {
+        content: "";
+        display: block;
+        height: 2px;
+        width: 60px;
+        background: #28a745;
+        margin-top: 6px;
+        border-radius: 2px;
+    }
+
+    .policy-container p {
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .policy-container ul {
+        margin: 15px 0 20px 25px;
+        padding-left: 15px;
+        list-style-type: disc;
+    }
+
+    .policy-container ul li {
+        margin-bottom: 12px;
+        font-size: 1.08rem;
+        color: #444;
+        transition: transform 0.2s ease, color 0.3s ease;
+    }
+
+    .policy-container ul li:hover {
+        transform: translateX(6px);
+        color: #28a745;
+    }
+
+    .notice-box {
+        margin-top: 30px;
+        padding: 18px 20px;
+        border-left: 5px solid #28a745;
+        background: #f6fff8;
+        border-radius: 10px;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .back-home {
+        text-align: center;
+        margin: 45px 0;
+    }
+
+    .back-home .back-link {
+        text-decoration: none;
+        font-size: 1rem;
+        color: #28a745;
+        border: 1px solid #28a745;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .back-home .back-link:hover {
+        background: #28a745;
+        color: white;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .policy-container {
+            margin: 30px 15px;
+            padding: 25px;
+        }
+
+        .policy-container h2 {
+            font-size: 2rem;
+        }
+
+        .policy-container h3 {
+            font-size: 1.25rem;
+        }
+    }
+</style>
+
+<div class="policy-container" data-aos="fade-up">
+    <h2>Privacy Policy</h2>
+    <p data-aos="fade-in" data-aos-delay="100">
+        Your privacy is important to us. This Privacy Policy explains how the Savelugu Municipal Assembly 
+        Revenue Mobilization App collects, uses, and protects your information.
+    </p>
+
+    <h3 data-aos="fade-right" data-aos-delay="200">Information We Collect</h3>
+    <p data-aos="fade-in" data-aos-delay="300">
+        We may collect data such as business registration details, payment records, and location data 
+        for transparency and efficiency in revenue collection.
+    </p>
+
+    <h3 data-aos="fade-right" data-aos-delay="400">How We Use Your Information</h3>
+    <ul data-aos="fade-in" data-aos-delay="500">
+        <li>To facilitate secure revenue collection</li>
+        <li>To improve service delivery</li>
+        <li>To ensure accountability and transparency</li>
+    </ul>
+
+    <h3 data-aos="fade-right" data-aos-delay="600">Data Security</h3>
+    <p data-aos="fade-in" data-aos-delay="700">
+        We use strict security measures to protect your information from unauthorized access or misuse.
+    </p>
+
+    <div class="notice-box" data-aos="fade-up" data-aos-delay="800">
+        🔒 <strong>Note:</strong> This policy may be updated from time to time. 
+        Continued use of the app indicates acceptance of any changes.
+    </div>
+</div>
+
+<div class="back-home">
+    <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+</div>
+
+<!-- AOS Animation JS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-in-out'
+    });
+</script>
+
+{% endblock %}
+

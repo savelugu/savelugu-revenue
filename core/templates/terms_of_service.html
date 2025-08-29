@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- AOS Animation CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #fdfdfd, #f4fdf7);
+        margin: 0;
+        padding: 0;
+    }
+
+    .terms-container {
+        max-width: 900px;
+        margin: 70px auto;
+        padding: 45px;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        color: #222;
+        line-height: 1.9;
+        transition: all 0.3s ease;
+    }
+
+    .terms-container:hover {
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .terms-container h2 {
+        text-align: center;
+        font-size: 2.6rem;
+        margin-bottom: 35px;
+        color: #0069d9;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .terms-container h3 {
+        margin-top: 40px;
+        font-size: 1.55rem;
+        color: #2c3e50;
+        font-weight: 600;
+        border-left: 4px solid #0069d9;
+        padding-left: 12px;
+        position: relative;
+    }
+
+    .terms-container h3::after {
+        content: "";
+        display: block;
+        height: 2px;
+        width: 60px;
+        background: #0069d9;
+        margin-top: 8px;
+        border-radius: 2px;
+    }
+
+    .terms-container p {
+        margin-bottom: 22px;
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.9;
+    }
+
+    .terms-container ul {
+        margin: 18px 0 25px 25px;
+        padding-left: 15px;
+        list-style-type: disc;
+    }
+
+    .terms-container ul li {
+        margin-bottom: 12px;
+        font-size: 1.08rem;
+        color: #444;
+        transition: transform 0.2s ease, color 0.3s ease;
+    }
+
+    .terms-container ul li:hover {
+        transform: translateX(5px);
+        color: #0069d9;
+    }
+
+    .notice-box {
+        margin-top: 35px;
+        padding: 18px 20px;
+        border-left: 5px solid #0069d9;
+        background: #f0f8ff;
+        border-radius: 10px;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .back-home {
+        text-align: center;
+        margin: 45px 0;
+    }
+
+    .back-home .back-link {
+        text-decoration: none;
+        font-size: 1rem;
+        color: #0069d9;
+        border: 1px solid #0069d9;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .back-home .back-link:hover {
+        background: #0069d9;
+        color: white;
+    }
+
+    /* AOS animations */
+    [data-aos] {
+        transition-property: transform, opacity;
+    }
+
+    @media (max-width: 768px) {
+        .terms-container {
+            margin: 30px 15px;
+            padding: 25px;
+        }
+
+        .terms-container h2 {
+            font-size: 2rem;
+        }
+
+        .terms-container h3 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<div class="terms-container" data-aos="fade-up">
+    <h2>Terms of Service</h2>
+    <p data-aos="fade-in" data-aos-delay="100">
+        By using the Savelugu Municipal Assembly Revenue Mobilization App, you agree to the following terms:
+    </p>
+
+    <h3 data-aos="fade-right" data-aos-delay="200">1. Acceptance of Terms</h3>
+    <p data-aos="fade-in" data-aos-delay="300">
+        Using this platform constitutes agreement to abide by municipal revenue laws and regulations.
+    </p>
+
+    <h3 data-aos="fade-right" data-aos-delay="400">2. User Responsibilities</h3>
+    <ul data-aos="fade-in" data-aos-delay="500">
+        <li>Provide accurate business and payment details</li>
+        <li>Use the app only for legal and authorized purposes</li>
+        <li>Report any suspicious activities immediately</li>
+    </ul>
+
+    <h3 data-aos="fade-right" data-aos-delay="600">3. Termination</h3>
+    <p data-aos="fade-in" data-aos-delay="700">
+        The Assembly reserves the right to suspend access in cases of fraud or policy violation.
+    </p>
+
+    <div class="notice-box" data-aos="fade-up" data-aos-delay="800">
+        ⚠️ <strong>Disclaimer:</strong> These terms may be updated periodically. Continued use of the app
+        indicates acceptance of any changes.
+    </div>
+</div>
+
+<div class="back-home">
+    <a href="{% url 'home' %}" class="back-link">⬅ Back to Home</a>
+</div>
+
+<!-- AOS Animation JS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-in-out'
+    });
+</script>
+
+{% endblock %}
+
