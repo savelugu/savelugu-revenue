@@ -1462,3 +1462,38 @@ def business_owner_payment_details(request, payment_id):
     return render(request, "core/business_owner_payment_details.html", {"payment": payment})
 
 
+# views.py
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.conf import settings
+
+def contact_view(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        message_content = request.POST.get("message")
+
+        if name and email and message_content:
+            subject = f"New Contact Message from {name}"
+            body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_content}"
+
+            try:
+                send_mail(
+                    subject,
+                    body,
+                    settings.DEFAULT_FROM_EMAIL,         # From email (your Gmail)
+                    [settings.EMAIL_RECIPIENT],          # Recipient email from .env
+                    fail_silently=False
+                )
+                messages.success(request, "✅ Your message has been sent successfully!")
+                return redirect("contact")  # Or any page you want to redirect to
+            except Exception as e:
+                messages.error(request, f"⚠️ An error occurred while sending your message: {e}")
+                return redirect("contact")
+        else:
+            messages.warning(request, "⚠️ Please fill in all fields before submitting.")
+            return redirect("contact")
+
+    return render(request, "contact.html")
+
