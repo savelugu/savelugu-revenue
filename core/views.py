@@ -1462,7 +1462,6 @@ def business_owner_payment_details(request, payment_id):
     return render(request, "core/business_owner_payment_details.html", {"payment": payment})
 
 
-# views.py
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -1474,27 +1473,30 @@ def contact_view(request):
         email = request.POST.get("email")
         message_content = request.POST.get("message")
 
-        if not all([name, email, message_content]):
+        if name and email and message_content:
+            subject = f"New Contact Message from {name}"
+            body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_content}"
+
+            try:
+                # Send email
+                send_mail(
+                    subject,
+                    body,
+                    settings.DEFAULT_FROM_EMAIL,      # From your Gmail
+                    [settings.EMAIL_RECIPIENT],       # To recipient
+                    fail_silently=False
+                )
+                # Success message
+                messages.success(request, "✅ Your message has been sent successfully!")
+                return redirect("contact")
+
+            except Exception as e:
+                # Error message if email fails
+                messages.error(request, f"⚠️ An error occurred while sending your message: {e}")
+                return redirect("contact")
+        else:
             messages.warning(request, "⚠️ Please fill in all fields before submitting.")
             return redirect("contact")
 
-        subject = f"New Contact Message from {name}"
-        body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_content}"
-
-        try:
-            send_mail(
-                subject,
-                body,
-                settings.DEFAULT_FROM_EMAIL,       # From your Gmail (EMAIL_HOST_USER)
-                [settings.EMAIL_RECIPIENT],        # To recipient
-                fail_silently=False,
-            )
-            messages.success(request, "✅ Your message has been sent successfully!")
-        except Exception as e:
-            messages.error(request, f"⚠️ An error occurred while sending your message: {e}")
-
-        return redirect("contact")
-
     return render(request, "contact.html")
-
 
