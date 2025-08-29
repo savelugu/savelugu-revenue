@@ -1474,26 +1474,27 @@ def contact_view(request):
         email = request.POST.get("email")
         message_content = request.POST.get("message")
 
-        if name and email and message_content:
-            subject = f"New Contact Message from {name}"
-            body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_content}"
-
-            try:
-                send_mail(
-                    subject,
-                    body,
-                    settings.DEFAULT_FROM_EMAIL,         # From email (your Gmail)
-                    [settings.EMAIL_RECIPIENT],          # Recipient email from .env
-                    fail_silently=False
-                )
-                messages.success(request, "✅ Your message has been sent successfully!")
-                return redirect("contact")  # Or any page you want to redirect to
-            except Exception as e:
-                messages.error(request, f"⚠️ An error occurred while sending your message: {e}")
-                return redirect("contact")
-        else:
+        if not all([name, email, message_content]):
             messages.warning(request, "⚠️ Please fill in all fields before submitting.")
             return redirect("contact")
 
+        subject = f"New Contact Message from {name}"
+        body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_content}"
+
+        try:
+            send_mail(
+                subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,       # From your Gmail (EMAIL_HOST_USER)
+                [settings.EMAIL_RECIPIENT],        # To recipient
+                fail_silently=False,
+            )
+            messages.success(request, "✅ Your message has been sent successfully!")
+        except Exception as e:
+            messages.error(request, f"⚠️ An error occurred while sending your message: {e}")
+
+        return redirect("contact")
+
     return render(request, "contact.html")
+
 
